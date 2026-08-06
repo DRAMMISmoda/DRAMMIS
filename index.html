@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DRAMMIS — Cinture Luxo & Street</title>
+<meta name="description" content="DRAMMIS — Maison di cinture contemporanea. Due mondi, Luxo e Street, una sola visione di eleganza." />
+<link rel="icon" type="image/png" href="assets/logo.png" />
+<meta name="theme-color" content="#141414" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="DRAMMIS" />
+<meta property="og:title" content="DRAMMIS — Cinture Luxo & Street" />
+<meta property="og:description" content="Maison di cinture contemporanea. Due mondi, Luxo e Street, una sola visione di eleganza." />
+<meta property="og:image" content="assets/logo.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="DRAMMIS — Cinture Luxo & Street" />
+<meta name="twitter:description" content="Maison di cinture contemporanea. Due mondi, Luxo e Street, una sola visione di eleganza." />
+<meta name="twitter:image" content="assets/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body class="theme-home">
+
+<!-- ===== HERO LOGO — grande sull'hero della home, si rimpicciolisce nell'header scorrendo ===== -->
+<a href="#" class="hero-logo" id="heroLogo" data-nav="home" aria-label="DRAMMIS home">
+  <img src="assets/logo.png" alt="DRAMMIS" class="hero-logo__img"
+       onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+  <span class="hero-logo__mark" style="display:none">DRAMMIS</span>
+</a>
+
+<!-- ===== ANIMATED LIQUID BACKGROUND ===== -->
+<div class="liquid" id="liquid" aria-hidden="true">
+  <span class="blob blob--1"></span>
+  <span class="blob blob--2"></span>
+  <span class="blob blob--3"></span>
+  <span class="liquid__grain"></span>
+</div>
+
+<!-- ===== SOFT PAGE TRANSITION ===== -->
+<div class="transition" id="transition" aria-hidden="true"></div>
+
+<!-- ===== COOKIE CONSENT ===== -->
+<div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Cookie" hidden>
+  <p>Usiamo cookie tecnici necessari al funzionamento del sito (carrello, preferiti, accesso) e, solo con il tuo consenso, cookie di analisi. <a href="#" data-nav="cookie-policy">Scopri di più</a></p>
+  <div class="cookie-banner__actions">
+    <button class="pill pill--ghost" id="cookieDeny">Solo necessari</button>
+    <button class="pill pill--dark" id="cookieAccept">Accetta tutti</button>
+  </div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<header class="header" id="header">
+  <div class="header__inner">
+    <div class="header__zone header__zone--left">
+      <button class="menu-toggle" id="menuToggle" aria-label="Apri il menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <a href="#" class="logo" data-nav="home" aria-label="DRAMMIS home">
+      <img src="assets/logo.png" alt="DRAMMIS" class="logo__img"
+           onerror="this.style.display='none';document.getElementById('logoText').style.display='inline-block'" />
+      <span class="logo__mark" id="logoText" style="display:none">DRAMMIS</span>
+    </a>
+
+    <nav class="header__zone header__zone--right" aria-label="Azioni">
+      <button class="icon-btn" id="searchBtn" aria-label="Cerca">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <button class="icon-btn icon-btn--cart" data-nav="cart" aria-label="Carrello">
+        <svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/><path d="M6 6 5 2H2"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="icon-btn" data-nav="account" aria-label="Profilo">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== SEARCH OVERLAY ===== -->
+<div class="search" id="search" aria-hidden="true">
+  <div class="search__inner">
+    <a href="#" class="search__logo" data-nav="home" aria-label="DRAMMIS home">
+      <img src="assets/logo.png" alt="DRAMMIS" class="logo__img" onerror="this.style.display='none'" />
+    </a>
+    <div class="search__bar">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Cerca prodotti, categorie…" autocomplete="off" />
+      <button class="search__close" id="searchClose" aria-label="Chiudi ricerca">✕</button>
+    </div>
+    <p class="search__meta" id="searchMeta">Inizia a digitare per cercare nella collezione.</p>
+    <div class="search__discovery" id="searchDiscovery">
+      <div class="search__block">
+        <span class="search__block-label">Ricerche di tendenza</span>
+        <div class="search__trends">
+          <button type="button" class="search__trend" data-trend="Sovrana">Sovrana</button>
+          <button type="button" class="search__trend" data-trend="Canvas Studs">Canvas Studs</button>
+          <button type="button" class="search__trend" data-trend="Cintura Nocturne">Cintura Nocturne</button>
+          <button type="button" class="search__trend" data-trend="Monogram">Monogram</button>
+          <button type="button" class="search__trend" data-trend="Street">Street</button>
+        </div>
+      </div>
+      <div class="search__block">
+        <span class="search__block-label">I più desiderati</span>
+        <div class="search__wanted" id="searchWanted"></div>
+      </div>
+    </div>
+    <div class="grid grid--shop search__results" id="searchResults"></div>
+  </div>
+</div>
+
+<!-- ===== SIDE DRAWER MENU ===== -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer__head">
+    <a href="#" class="drawer__logo" data-nav="home" aria-label="DRAMMIS home">
+      <img src="assets/logo.png" alt="DRAMMIS" class="logo__img" onerror="this.style.display='none'" />
+    </a>
+    <button class="drawer__close" id="drawerClose" aria-label="Chiudi il menu">✕</button>
+  </div>
+  <span class="drawer__eyebrow">Menu</span>
+  <nav class="drawer__nav">
+    <a href="#" data-nav="home"><span>01</span>Home</a>
+    <a href="#" data-nav="street"><span>02</span>Street</a>
+    <a href="#" data-nav="luxo"><span>03</span>Luxo</a>
+  </nav>
+  <div class="drawer__foot">
+    <a href="https://www.instagram.com/drammis_ita" target="_blank" rel="noopener noreferrer">Instagram<span class="drawer__arrow">↗</span></a>
+    <a href="https://www.tiktok.com/@drammis_ita" target="_blank" rel="noopener noreferrer">TikTok<span class="drawer__arrow">↗</span></a>
+    <a href="#">Pinterest<span class="drawer__arrow">↗</span></a>
+  </div>
+</aside>
+
+<!-- ===== VIEWS ===== -->
+<main id="app">
+
+  <!-- ============ HOME ============ -->
+  <section class="view view--active" data-view="home">
+    <!-- ============ STACK SCORREVOLE — hero, box, street/luxo, campagna, frase ============ -->
+    <div class="scrollstack">
+      <!-- HERO — banner a schermo intero -->
+      <div class="hero hero--home hero--video">
+        <div class="hero__media">
+          <div class="hero__slide is-active" style="background-image:url('https://images.unsplash.com/photo-1664286074176-5206ee5dc878?auto=format&fit=crop&w=1920&q=80')"></div>
+          <video class="hero__video" data-src="assets/video/hero-home.mp4" muted loop playsinline autoplay></video>
+        </div>
+        <div class="hero__veil"></div>
+      </div>
+
+      <!-- CATEGORIE — Street / Luxo -->
+      <section class="category-duo">
+        <a href="#" class="duo__panel duo__panel--mascot" data-nav="street">
+          <div class="duo__img duo__img--cover" style="background-image:url('assets/mascots/luma-street-bg.jpg')"></div>
+          <div class="duo__veil"></div>
+          <span class="duo__word">STREET</span>
+          <span class="duo__mascot-tag">LUMA · L'istinto non si finge</span>
+        </a>
+        <a href="#" class="duo__panel duo__panel--mascot" data-nav="luxo">
+          <div class="duo__img duo__img--cover" style="background-image:url('assets/mascots/ichi-luxo-bg.jpg')"></div>
+          <div class="duo__veil"></div>
+          <span class="duo__word">LUXO</span>
+          <span class="duo__mascot-tag">ICHI · Il silenzio è la forma più alta di eleganza</span>
+        </a>
+      </section>
+
+      <!-- CAMPAIGN — schermo intero -->
+      <section class="campaign-banner">
+        <div class="campaign-banner__img" style="background-image:url('https://images.unsplash.com/photo-1628483211662-9bcc692c46dc?auto=format&fit=crop&w=1920&q=80')"></div>
+        <div class="campaign-banner__veil"></div>
+        <div class="campaign-banner__content">
+          <span class="eyebrow eyebrow--light reveal">Campagna FW / 26</span>
+          <h2 class="campaign-banner__title reveal">Cintura<br/>Nocturne</h2>
+          <p class="campaign-banner__desc reveal">Un dialogo tra ombra e luce. Un numero limitato di pezzi numerati. Un solo momento.</p>
+          <div class="hero__cta reveal">
+            <button class="btn-ghost" data-nav="campagna">Scopri la campagna</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============ LA MAISON — Fondazione / Luma / Ichi ============ -->
+    <section class="section trio" id="maisonTrio">
+      <div class="section__head section__head--center reveal">
+        <span class="eyebrow">La Maison</span>
+        <h2 class="display">Dietro ogni fibbia</h2>
+      </div>
+      <div class="trio__grid">
+        <a href="#" class="trio__card reveal" data-nav="about">
+          <div class="trio__frame">
+            <div class="trio__img" style="background-image:url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=900&q=80')"></div>
+          </div>
+          <span class="trio__label">Fondazione</span>
+        </a>
+        <a href="#" class="trio__card reveal" data-nav="luma">
+          <div class="trio__frame">
+            <div class="trio__img" style="background-image:url('assets/mascots/luma-portrait.jpg')"></div>
+          </div>
+          <span class="trio__label">LUMA</span>
+        </a>
+        <a href="#" class="trio__card reveal" data-nav="ichi">
+          <div class="trio__frame">
+            <div class="trio__img" style="background-image:url('assets/mascots/ichi-portrait.jpg')"></div>
+          </div>
+          <span class="trio__label">ICHI</span>
+        </a>
+      </div>
+    </section>
+
+    <div data-footer></div>
+  </section>
+
+  <!-- ============ STREET ============ -->
+  <section class="view" data-view="street">
+    <button class="page-back" data-back aria-label="Torna indietro">
+      <svg viewBox="0 0 24 24"><line x1="20" y1="12" x2="6" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+      <span>Torna indietro</span>
+    </button>
+    <div class="scrollstack">
+      <div class="hero hero--page hero--video">
+        <div class="hero__media">
+          <div class="hero__slide is-active" style="background-image:url('https://images.unsplash.com/photo-1629958513881-a086d21383cd?auto=format&fit=crop&w=1920&q=80')"></div>
+          <video class="hero__video" data-src="assets/video/hero-street.mp4" muted loop playsinline autoplay></video>
+        </div>
+        <div class="hero__veil"></div>
+        <div class="hero__content hero__content--center">
+          <h1 class="hero__mega reveal">STREET</h1>
+          <p class="hero__tag reveal">Codici urbani, esecuzione couture.</p>
+        </div>
+        <div class="hero__scroll">Scorri</div>
+      </div>
+      <a href="#" class="feature-banner" id="streetFeature"></a>
+    </div>
+    <div data-footer></div>
+  </section>
+
+  <!-- ============ LUXO ============ -->
+  <section class="view" data-view="luxo">
+    <button class="page-back" data-back aria-label="Torna indietro">
+      <svg viewBox="0 0 24 24"><line x1="20" y1="12" x2="6" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+      <span>Torna indietro</span>
+    </button>
+    <div class="scrollstack">
+      <div class="hero hero--page hero--video">
+        <div class="hero__media">
+          <div class="hero__slide is-active" style="background-image:url('https://images.unsplash.com/photo-1531188929123-0cfa61e6c770?auto=format&fit=crop&w=1920&q=80')"></div>
+          <video class="hero__video" data-src="assets/video/hero-luxo.mp4" muted loop playsinline autoplay></video>
+        </div>
+        <div class="hero__veil"></div>
+        <div class="hero__content hero__content--center">
+          <h1 class="hero__mega reveal">LUXO</h1>
+          <p class="hero__tag reveal">L'eccellenza, resa essenziale.</p>
+        </div>
+        <div class="hero__scroll">Scorri</div>
+      </div>
+      <a href="#" class="feature-banner" id="luxoFeature"></a>
+    </div>
+    <div data-footer></div>
+  </section>
+
+  <!-- ============ CAMPAGNA — Prima Notte ============ -->
+  <section class="view" data-view="campagna">
+    <button class="page-back" data-back aria-label="Torna indietro">
+      <svg viewBox="0 0 24 24"><line x1="20" y1="12" x2="6" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+      <span>Torna indietro</span>
+    </button>
+    <div class="about-hero">
+      <div class="about-hero__img" style="background-image:url('https://images.unsplash.com/photo-1628483211662-9bcc692c46dc?auto=format&fit=crop&w=1920&q=80')"></div>
+      <div class="about-hero__veil"></div>
+      <div class="about-hero__content">
+        <span class="hero__eyebrow reveal">Campagna FW / 26 — Prima Notte</span>
+        <h1 class="hero__mega hero__mega--sm reveal">Cintura Nocturne</h1>
+        <p class="hero__tag reveal">Un dialogo tra ombra e luce. Un numero limitato di pezzi numerati. Un solo momento.</p>
+        <div class="countdown countdown--hero reveal" id="countdown">
+          <div class="cd"><span data-cd="d">00</span><small>Giorni</small></div>
+          <div class="cd"><span data-cd="h">00</span><small>Ore</small></div>
+          <div class="cd"><span data-cd="m">00</span><small>Min</small></div>
+          <div class="cd"><span data-cd="s">00</span><small>Sec</small></div>
+        </div>
+      </div>
+    </div>
+    <section class="ed">
+      <div class="ed__text reveal">
+        <span class="eyebrow">01 — L'ispirazione</span>
+        <h2 class="display">Nata dalla notte,<br/>fatta per durare</h2>
+        <p>Nocturne nasce da un'unica immagine: la città dopo mezzanotte, quando le luci si fanno rade e ogni dettaglio conta di più. Una cintura pensata per chi si muove nell'ombra con la stessa sicurezza con cui si muove alla luce del giorno.</p>
+        <p>Pelle pieno fiore lavorata a mano, fibbia scultorea brunita, ogni esemplare numerato singolarmente sulla fodera interna.</p>
+      </div>
+      <div class="ed__img reveal" style="background-image:url('https://images.unsplash.com/photo-1664286022075-8e997e95bd17?auto=format&fit=crop&w=1000&q=80')"></div>
+    </section>
+    <section class="ed ed--reverse">
+      <div class="ed__text reveal">
+        <span class="eyebrow">02 — L'edizione</span>
+        <h2 class="display">Cinquecento pezzi,<br/>una sola notte</h2>
+        <p>Nessuna riedizione, nessuna ristampa. Quando l'ultimo pezzo numerato trova il suo proprietario, la campagna si chiude per sempre. È questo il patto con chi sceglie Nocturne: possedere qualcosa che non tornerà mai più in produzione.</p>
+      </div>
+      <div class="ed__img reveal" style="background-image:url('https://images.unsplash.com/photo-1717156816269-89f5f968db8b?auto=format&fit=crop&w=1000&q=80')"></div>
+    </section>
+    <section class="about-band reveal">
+      <span class="eyebrow eyebrow--light">03 — Il gesto</span>
+      <h2 class="display display--light">"Un gesto cucito nell'ombra,<br/>per chi non aspetta la luce."</h2>
+    </section>
+    <div data-footer></div>
+  </section>
+
+  <!-- ============ CHI SIAMO ============ -->
+  <section class="view" data-view="about">
+    <div class="about-hero">
+      <div class="about-hero__img" style="background-image:url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1920&q=80')"></div>
+      <div class="about-hero__veil"></div>
+      <div class="about-hero__content">
+        <span class="hero__eyebrow reveal">La Maison</span>
+        <h1 class="hero__mega hero__mega--sm reveal">Fondazione</h1>
+        <p class="hero__tag reveal">Una storia nata dal rifiuto di essere come tutti gli altri.</p>
+      </div>
+    </div>
+    <section class="ed">
+      <div class="ed__text reveal">
+        <span class="eyebrow">01 — L'origine</span>
+        <h2 class="display">Contro la moda<br/>piatta</h2>
+        <p>DRAMMIS nasce dalla volontà di due persone di creare qualcosa di realmente proprio — non un altro brand, ma un modo diverso di vedere il mondo. È nato da una sensazione precisa: la moda si ripeteva. Le collezioni si somigliavano, e l'innovazione era spesso solo una parola usata per vendere variazioni di ciò che esisteva già.</p>
+        <p>Mancava identità. Per questo abbiamo deciso di costruire un brand capace di mettere in discussione ciò che viene considerato normale — non per aggiungerci alla moda, ma per provare a cambiarne le regole.</p>
+      </div>
+      <div class="ed__img reveal" style="background-image:url('https://images.unsplash.com/photo-1544022613-e87ca75a784a?auto=format&fit=crop&w=1000&q=80')"></div>
+    </section>
+    <section class="ed ed--reverse">
+      <div class="ed__text reveal">
+        <span class="eyebrow">02 — La filosofia</span>
+        <h2 class="display">Non piatta.<br/>Tridimensionale.</h2>
+        <p>Crediamo che la moda sia diventata piatta — nei prodotti, nelle forme, nel modo di comunicare con le persone. DRAMMIS vuole essere il contrario: tridimensionale. Non è solo una scelta estetica, ma un modo di pensare che ci spinge a non fermarci al limite a cui si sono fermati gli altri.</p>
+        <p>Questa tensione vive anche nella nostra dualità: Luxo e Street, calma e istinto, eleganza e ribellione — due estremi che in DRAMMIS convivono, incarnati da Ichi e Luma.</p>
+      </div>
+      <div class="ed__img reveal" style="background-image:url('https://images.unsplash.com/photo-1548624313-0396c75e4b1a?auto=format&fit=crop&w=1000&q=80')"></div>
+    </section>
+
+    <section class="about-band reveal">
+      <span class="eyebrow eyebrow--light">03 — La visione</span>
+      <h2 class="display display--light">"Non vogliamo scegliere tra essere grandi<br/>e rimanere innovativi. Vogliamo trovare una terza strada."</h2>
+    </section>
+    <section class="section">
+      <div class="section__head section__head--center reveal">
+        <span class="eyebrow">04 — I valori</span>
+        <h2 class="display">Ciò in cui crediamo</h2>
+      </div>
+      <div class="values">
+        <div class="value reveal"><span>I</span><h4>Innovazione</h4><p>È il cuore di DRAMMIS. Non inseguiamo ciò che funziona solo perché funziona: continuiamo a sperimentare, migliorare, cercare nuove strade.</p></div>
+        <div class="value reveal"><span>II</span><h4>Autenticità</h4><p>DRAMMIS deve rappresentare davvero ciò in cui crediamo. Nessuna identità costruita a tavolino solo perché vendibile.</p></div>
+        <div class="value reveal"><span>III</span><h4>Artigianalità</h4><p>L'innovazione non significa sacrificare la qualità. Materiali, lavorazione e attenzione al dettaglio restano al centro di ogni pezzo.</p></div>
+        <div class="value reveal"><span>IV</span><h4>Ambizione</h4><p>Vogliamo costruire qualcosa di grande — un brand capace, un giorno, di cambiare davvero il modo in cui la moda viene pensata.</p></div>
+      </div>
+    </section>
+    <section class="ed">
+      <div class="ed__text reveal">
+        <span class="eyebrow">05 — Il futuro</span>
+        <h2 class="display">Non un brand.<br/>Un universo.</h2>
+        <p>DRAMMIS non vuole restare solo un brand di moda. Vuole diventare un universo fatto di prodotti, storie, personaggi e persone — dove Ichi e Luma possano essere seguiti, conosciuti e discussi come se fossero reali.</p>
+        <p>Tra vent'anni vogliamo che DRAMMIS sia uno dei nomi più riconoscibili al mondo — non solo per quanto vende, ma perché le persone avranno capito cosa rappresenta davvero: un brand che non ha mai smesso di sperimentare, e che non si è mai piegato alla moda piatta che aveva scelto di combattere.</p>
+        <button class="pill pill--dark" data-nav="home">Esplora le collezioni <em>→</em></button>
+      </div>
+      <div class="ed__img reveal" style="background-image:url('https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=1000&q=80')"></div>
+    </section>
+
+    <!-- ============ FONDATORI ============ -->
+    <section class="founders">
+      <h2 class="founders__title reveal">FONDATORI</h2>
+      <div class="founders__grid">
+        <div class="founder reveal">
+          <div class="founder__portrait">
+            <img src="assets/founders/daniel-marchica.jpg" alt="Daniel Marchica" class="founder__img"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+            <div class="founder__fallback"><span>DM</span></div>
+          </div>
+          <h3 class="founder__name">Daniel Marchica</h3>
+        </div>
+        <div class="founder reveal">
+          <div class="founder__portrait">
+            <img src="assets/founders/manuel-drammis.jpg" alt="Manuel Drammis" class="founder__img"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+            <div class="founder__fallback"><span>MD</span></div>
+          </div>
+          <h3 class="founder__name">Manuel Drammis</h3>
+        </div>
+      </div>
+    </section>
+
+    <div class="story-back-wrap">
+      <a href="#" class="pdp__back story-back" data-back>
+        <svg viewBox="0 0 24 24"><line x1="20" y1="12" x2="6" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+        <span>Torna indietro</span>
+      </a>
+    </div>
+    <div data-footer></div>
+  </section>
+
+  <!-- ============ LUMA — storia completa ============ -->
+  <section class="view" data-view="luma">
+    <div class="about-hero">
+      <div class="about-hero__img" style="background-image:url('assets/mascots/luma-street-bg.jpg')"></div>
+      <div class="about-hero__veil"></div>
+      <div class="about-hero__content">
+        <span class="hero__eyebrow reveal">Spirito Street</span>
+        <h1 class="hero__mega hero__mega--sm reveal">LUMA</h1>
+        <p class="hero__tag reveal">L'istinto non si finge.</p>
+      </div>
+    </div>
+    <section class="ed">
+      <div class="ed__text reveal">
+        <span class="eyebrow">01 — L'origine</span>
+        <h2 class="display">Nata<br/>dall'asfalto</h2>
+        <p>Corona d'ametista, sguardo tagliente: LUMA nasce dall'asfalto e dalle luci al neon delle città che non dormono mai. È l'estremo streetwear di DRAMMIS — forte, decisa, imprevedibile, libera. Sceglie in un secondo e non si volta mai indietro.</p>
+        <p>Cresciuta tra saracinesche dipinte e stazioni della metro, ha imparato presto che il coraggio non si chiede in prestito — o ce l'hai, o lo trovi correndo. Sotto la corazza, un cuore enorme: LUMA non lascia mai indietro chi sceglie di starle vicino.</p>
+      </div>
+      <div class="ed__img reveal" style="background-image:url('assets/mascots/luma-portrait.jpg')"></div>
+    </section>
+    <section class="ed ed--reverse">
+      <div class="ed__text reveal">
+        <span class="eyebrow">02 — Il carattere</span>
+        <h2 class="display">Istinto,<br/>non rumore</h2>
+        <p>Veglia sull'anima Street di DRAMMIS: ogni fibbia, ogni cucitura a vista, ogni dettaglio che sembra "sbagliato" apposta è una sua firma. LUMA non chiede il permesso di esistere — lo prende.</p>
+        <p>È sorella e opposto di ICHI: dove lui calcola, lei improvvisa; dove lui misura il silenzio, lei alza la voce. Due estremi della stessa famiglia — perché nessuna persona è fatta di una sola anima.</p>
+        <div class="ed__actions">
+          <button class="pill pill--dark" data-nav="street">Scopri la collezione Street <em>→</em></button>
+          <a class="pill pill--ghost" href="https://www.instagram.com/lumadrammis" target="_blank" rel="noopener noreferrer">Segui @lumadrammis <em>↗</em></a>
+        </div>
+      </div>
+      <div class="ed__img reveal" style="background-image:url('assets/mascots/luma-ichi-worlds.jpg')"></div>
+    </section>
+    <div class="story-back-wrap">
+      <a href="#" class="pdp__back story-back" data-back>
+        <svg viewBox="0 0 24 24"><line x1="20" y1="12" x2="6" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+        <span>Torna indietro</span>
+      </a>
+    </div>
+    <div data-footer></div>
+  </section>
+
+  <!-- ============ ICHI — storia completa ============ -->
+  <section class="view" data-view="ichi">
+    <div class="about-hero">
+      <div class="about-hero__img" style="background-image:url('assets/mascots/ichi-luxo-bg.jpg')"></div>
+      <div class="about-hero__veil"></div>
+      <div class="about-hero__content">
+        <span class="hero__eyebrow reveal">Spirito Luxo</span>
+        <h1 class="hero__mega hero__mega--sm reveal">ICHI</h1>
+        <p class="hero__tag reveal">Il silenzio è la forma più alta di eleganza.</p>
+      </div>
+    </div>
+    <section class="ed">
+      <div class="ed__text reveal">
+        <span class="eyebrow">01 — L'origine</span>
+        <h2 class="display">Nato<br/>nel silenzio</h2>
+        <p>Corona d'oro, portamento quieto: ICHI è l'estremo luxury di DRAMMIS — freddo, calcolatore, strategico. Abita saloni silenziosi e pomeriggi lenti, dove ogni gesto ha già il suo posto e ogni mossa è già stata pensata due volte.</p>
+        <p>Cresciuto tra atelier di sartoria e biblioteche di famiglia, ha imparato che il vero potere non si mostra: si esercita in silenzio. Non insegue le mode — decide quando lasciarle passare.</p>
+      </div>
+      <div class="ed__img reveal" style="background-image:url('assets/mascots/ichi-portrait.jpg')"></div>
+    </section>
+    <section class="ed ed--reverse">
+      <div class="ed__text reveal">
+        <span class="eyebrow">02 — Il carattere</span>
+        <h2 class="display">Misura,<br/>non voce</h2>
+        <p>Custodisce l'anima Luxo di DRAMMIS: la pelle piena fiore, la cucitura invisibile, la lucentezza che si guadagna col tempo. ICHI non ha bisogno di alzare la voce — chi capisce, capisce già.</p>
+        <p>È fratello e opposto di LUMA: dove lei improvvisa, lui calcola; dove lei corre, lui misura il passo. Due estremi della stessa famiglia — perché nessuna persona è fatta di una sola anima.</p>
+        <div class="ed__actions">
+          <button class="pill pill--dark" data-nav="luxo">Scopri la collezione Luxo <em>→</em></button>
+          <a class="pill pill--ghost" href="https://www.instagram.com/ichidrammis" target="_blank" rel="noopener noreferrer">Segui @ichidrammis <em>↗</em></a>
+        </div>
+      </div>
+      <div class="ed__img reveal" style="background-image:url('assets/mascots/luma-ichi-worlds.jpg')"></div>
+    </section>
+    <div class="story-back-wrap">
+      <a href="#" class="pdp__back story-back" data-back>
+        <svg viewBox="0 0 24 24"><line x1="20" y1="12" x2="6" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+        <span>Torna indietro</span>
+      </a>
+    </div>
+    <div data-footer></div>
+  </section>
+
+  <!-- ============ PRODUCT DETAIL ============ -->
+  <section class="view" data-view="product">
+    <div class="pdp pdp--v2">
+      <!-- FOTO PRINCIPALE — schermo intero -->
+      <div class="pdp__mediawrap">
+        <div class="pdp__main" id="pdpMain"></div>
+        <button class="pdp__back pdp__back--float" data-back aria-label="Torna indietro">
+          <svg viewBox="0 0 24 24"><line x1="20" y1="12" x2="6" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+          <span>Torna indietro</span>
+        </button>
+      </div>
+
+      <!-- DUE QUADRATI GRANDI ATTACCATI — galleria -->
+      <div class="pdp__thumbs" id="pdpThumbs"></div>
+
+      <!-- INFORMAZIONI — sotto le immagini -->
+      <div class="pdp__info-wrap">
+        <div class="pdp__info">
+          <h1 class="pdp__name" id="pdpName"></h1>
+          <div class="pdp__price" id="pdpPrice"></div>
+
+          <div class="pdp__block">
+            <span class="pdp__label">Colore — <em id="pdpColorName"></em></span>
+            <div class="pdp__colors" id="pdpColors"></div>
+          </div>
+
+          <div class="pdp__block pdp__prevblock">
+            <span class="pdp__label">Anteprima colore</span>
+            <div class="pdp__colorprev" id="pdpColorPrev"></div>
+          </div>
+
+          <p class="pdp__stock" id="pdpStock" hidden></p>
+          <div class="pdp__actions">
+            <button class="pill pill--dark pdp__add" id="pdpAdd">Aggiungi al carrello <em>→</em></button>
+            <button class="pdp__wish" id="pdpWish" aria-label="Aggiungi ai preferiti">
+              <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+            </button>
+          </div>
+
+          <div class="pdp__section">
+            <h3 class="pdp__h">Descrizione</h3>
+            <p id="pdpDesc"></p>
+          </div>
+          <div class="pdp__section">
+            <h3 class="pdp__h">Materiali</h3>
+            <p id="pdpMaterials"></p>
+          </div>
+          <div class="pdp__section">
+            <h3 class="pdp__h">Consegna e Pagamento</h3>
+            <p>Spedizione standard gratuita in 2–4 giorni lavorativi. Reso gratuito entro 30 giorni con etichetta prepagata. Pagamenti sicuri: carta di credito, PayPal, Apple Pay e Google Pay.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div data-footer></div>
+  </section>
+
+  <!-- ============ PREFERITI ============ -->
+  <section class="view" data-view="wishlist">
+    <button class="page-back" data-back aria-label="Torna indietro">
+      <svg viewBox="0 0 24 24"><line x1="20" y1="12" x2="6" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+      <span>Torna indietro</span>
+    </button>
+    <div class="shop-head">
+      <span class="eyebrow">La tua selezione</span>
+      <h1 class="page-title">Preferiti</h1>
+      <p class="shop-head__sub" id="wishSub"></p>
+    </div>
+    <section class="section section--shop">
+      <div class="grid grid--shop" id="wishGrid"></div>
+      <div class="empty" id="wishEmpty" hidden>
+        <img class="empty__mascot" src="assets/mascots/ichi-cutout.png" alt="ICHI" loading="lazy" />
+        <p>ICHI non ha ancora nulla da custodire qui.</p>
+        <button class="pill pill--dark" data-nav="home">Scopri le collezioni <em>→</em></button>
+      </div>
+    </section>
+    <div data-footer></div>
+  </section>
+
+  <!-- ============ CARRELLO ============ -->
+  <section class="view" data-view="cart">
+    <button class="page-back" data-back aria-label="Torna indietro">
+      <svg viewBox="0 0 24 24"><line x1="20" y1="12" x2="6" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+      <span>Torna indietro</span>
+    </button>
+    <div class="shop-head">
+      <span class="eyebrow">Il tuo ordine</span>
+      <h1 class="page-title">Carrello</h1>
+    </div>
+    <section class="section section--shop">
+      <div class="cart-layout" id="cartLayout">
+        <div class="cart-items" id="cartItems"></div>
+        <aside class="cart-summary" id="cartSummary"></aside>
+      </div>
+      <div class="empty" id="cartEmpty" hidden>
+        <img class="empty__mascot" src="assets/mascots/luma-cutout.png" alt="LUMA" loading="lazy" />
+        <p>LUMA aspetta ancora la prima mossa. Il carrello è vuoto.</p>
+        <button class="pill pill--dark" data-nav="home">Inizia lo shopping <em>→</em></button>
+      </div>
+    </section>
+    <div data-footer></div>
+  </section>
+
+  <!-- ============ CHECKOUT ============ -->
+  <section class="view" data-view="checkout">
+    <button class="page-back" data-back aria-label="Torna indietro">
+      <svg viewBox="0 0 24 24"><line x1="20" y1="12" x2="6" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+      <span>Torna indietro</span>
+    </button>
+    <div class="shop-head">
+      <span class="eyebrow">Pagamento sicuro</span>
+      <h1 class="page-title">Checkout</h1>
+    </div>
+    <section class="section section--shop">
+      <div class="checkout-layout" id="checkoutLayout">
+        <form class="checkout-form" id="checkoutForm" novalidate>
+          <fieldset class="co-block">
+            <legend>Dati cliente</legend>
+            <div class="co-grid">
+              <label>Nome<input type="text" name="firstname" required></label>
+              <label>Cognome<input type="text" name="lastname" required></label>
+              <label class="co-full">Email<input type="email" name="email" required></label>
+              <label class="co-full">Telefono<input type="tel" name="phone"></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="co-block">
+            <legend>Indirizzo di spedizione</legend>
+            <div class="co-grid">
+              <label class="co-full">Indirizzo<input type="text" name="address" required></label>
+              <label>Città<input type="text" name="city" required></label>
+              <label>CAP<input type="text" name="zip" required></label>
+              <label>Provincia<input type="text" name="province"></label>
+              <label>Paese<input type="text" name="country" value="Italia"></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="co-block">
+            <legend>Fatturazione</legend>
+            <label class="co-check"><input type="checkbox" name="invoice" id="invoiceToggle" /> Richiedi fattura (aziende e liberi professionisti)</label>
+            <div class="co-grid" id="invoiceFields" hidden>
+              <label class="co-full">Ragione sociale<input type="text" name="company"></label>
+              <label>P.IVA<input type="text" name="vat"></label>
+              <label>Codice Fiscale<input type="text" name="fiscalcode"></label>
+              <label class="co-full">Codice SDI o PEC<input type="text" name="sdi"></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="co-block">
+            <legend>Metodo di spedizione</legend>
+            <label class="co-radio"><input type="radio" name="shipping" value="standard" checked><span><strong>Standard</strong> · 2–4 giorni <em id="shipStd">Gratis</em></span></label>
+            <label class="co-radio"><input type="radio" name="shipping" value="express"><span><strong>Express</strong> · 24–48h <em>€25</em></span></label>
+          </fieldset>
+
+          <fieldset class="co-block">
+            <legend>Pagamento</legend>
+            <div class="pay-methods">
+              <label class="pay"><input type="radio" name="pay" value="card" checked><span class="pay__name">Carta di credito</span></label>
+              <label class="pay"><input type="radio" name="pay" value="paypal"><span class="pay__name">PayPal</span></label>
+              <label class="pay"><input type="radio" name="pay" value="applepay"><span class="pay__name">Apple Pay</span></label>
+              <label class="pay"><input type="radio" name="pay" value="googlepay"><span class="pay__name">Google Pay</span></label>
+            </div>
+            <div class="pay-fields" id="payFields">
+              <div class="co-grid">
+                <label class="co-full">Numero carta<input type="text" inputmode="numeric" placeholder="0000 0000 0000 0000"></label>
+                <label>Scadenza<input type="text" placeholder="MM/AA"></label>
+                <label>CVC<input type="text" placeholder="123"></label>
+              </div>
+            </div>
+            <div class="pay-note" id="payNote" hidden>Verrai reindirizzato al gateway sicuro per completare il pagamento. <em>Integrazione API predisposta.</em></div>
+          </fieldset>
+
+          <button type="submit" class="pill pill--dark co-submit">Conferma ordine <em>→</em></button>
+          <p class="account__msg" id="checkoutMsg" hidden></p>
+        </form>
+        <aside class="checkout-summary" id="checkoutSummary"></aside>
+      </div>
+      <div class="empty" id="checkoutEmpty" hidden>
+        <p>Nessun articolo da pagare.</p>
+        <button class="pill pill--dark" data-nav="home">Torna allo shop <em>→</em></button>
+      </div>
+      <div class="co-done" id="coDone" hidden>
+        <div class="co-done__mark">✓</div>
+        <h2 class="display">Ordine confermato</h2>
+        <p>Grazie per il tuo acquisto. Il tuo ordine è stato registrato.<br/>Totale addebitato: <strong id="coDoneTotal"></strong>.</p>
+        <button class="pill pill--dark" data-nav="home">Torna alla home <em>→</em></button>
+      </div>
+    </section>
+    <div data-footer></div>
+  </section>
+
+  <!-- ============ ACCOUNT ============ -->
+  <section class="view" data-view="account">
+    <button class="page-back" data-back aria-label="Torna indietro">
+      <svg viewBox="0 0 24 24"><line x1="20" y1="12" x2="6" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+      <span>Torna indietro</span>
+    </button>
+    <div class="shop-head">
+      <span class="eyebrow">Area riservata</span>
+      <h1 class="page-title">Account</h1>
+    </div>
+    <section class="section section--shop">
+      <div class="account" id="accountPanel"></div>
+    </section>
+    <div data-footer></div>
+  </section>
+
+  <!-- ============ ASSISTENZA ============ -->
+  <section class="view" data-view="support">
+    <button class="page-back" data-back aria-label="Torna indietro">
+      <svg viewBox="0 0 24 24"><line x1="20" y1="12" x2="6" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+      <span>Torna indietro</span>
+    </button>
+    <div class="shop-head">
+      <span class="eyebrow">Come possiamo aiutarti</span>
+      <h1 class="page-title">Assistenza</h1>
+    </div>
+    <section class="section section--shop support">
+      <div class="support__grid">
+        <div class="support__card" id="sup-contatti">
+          <h3>Contatti</h3>
+          <p>Il nostro client service è a tua disposizione dal lunedì al sabato, 9:00–19:00.</p>
+          <p><strong>Email:</strong> <a href="mailto:info.drammis@gmail.com">info.drammis@gmail.com</a></p>
+        </div>
+        <div class="support__card" id="sup-faq">
+          <h3>FAQ</h3>
+          <details><summary>Come scelgo la taglia?</summary><p>Ogni scheda prodotto riporta la vestibilità. In caso di dubbio, il client service ti guida nella scelta.</p></details>
+          <details><summary>Posso modificare un ordine?</summary><p>Puoi modificarlo entro 1 ora dalla conferma scrivendo a <a href="mailto:info.drammis@gmail.com">info.drammis@gmail.com</a>.</p></details>
+          <details><summary>I pezzi sono numerati?</summary><p>Le edizioni limitate riportano un numero di serie della maison.</p></details>
+        </div>
+        <div class="support__card" id="sup-spedizioni">
+          <h3>Spedizioni</h3>
+          <p>Spedizione standard <strong>gratuita</strong> in 2–4 giorni lavorativi in Italia e UE.</p>
+          <p>Consegna express 24–48h disponibile al checkout (€25). Ogni ordine viene tracciato e consegnato in packaging couture.</p>
+        </div>
+        <div class="support__card" id="sup-resi">
+          <h3>Resi</h3>
+          <p>Resi <strong>gratuiti entro 30 giorni</strong> dalla consegna.</p>
+          <p>Avvia la pratica dal tuo account o contattando il client service: riceverai un'etichetta prepagata. Rimborso entro 5 giorni lavorativi dal rientro.</p>
+        </div>
+      </div>
+    </section>
+    <div data-footer></div>
+  </section>
+
+  <!-- ============ TERMINI E CONDIZIONI ============ -->
+  <section class="view" data-view="termini">
+    <button class="page-back" data-back aria-label="Torna indietro">
+      <svg viewBox="0 0 24 24"><line x1="20" y1="12" x2="6" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+      <span>Torna indietro</span>
+    </button>
+    <div class="shop-head">
+      <span class="eyebrow">Informazioni legali</span>
+      <h1 class="page-title">Termini e Condizioni di Vendita</h1>
+    </div>
+    <section class="section section--shop legal">
+      <p class="legal__notice">Documento dimostrativo. Prima della pubblicazione online, fai revisionare questo testo da un legale per la conformità al Codice del Consumo e alla normativa UE sulla vendita a distanza, e sostituisci i dati societari segnaposto con quelli reali.</p>
+
+      <h2>1. Oggetto</h2>
+      <p>Le presenti Condizioni Generali di Vendita regolano l'acquisto dei prodotti offerti sul sito DRAMMIS da parte dell'utente ("Cliente"). Effettuando un ordine, il Cliente dichiara di aver letto e accettato integralmente queste condizioni.</p>
+
+      <h2>2. Il venditore</h2>
+      <p>Venditore: DRAMMIS [Ragione Sociale da inserire] — P.IVA [da inserire] — Sede legale: Milano, Italia. Contatti: <a href="mailto:info.drammis@gmail.com">info.drammis@gmail.com</a>.</p>
+
+      <h2>3. Prodotti e disponibilità</h2>
+      <p>Le immagini e le descrizioni dei prodotti hanno valore indicativo. Le edizioni limitate sono disponibili fino a esaurimento delle scorte indicate sulla scheda prodotto.</p>
+
+      <h2>4. Prezzi e pagamento</h2>
+      <p>I prezzi sono espressi in Euro e comprensivi di IVA. Il pagamento avviene tramite i metodi indicati in fase di checkout. L'ordine si considera confermato al ricevimento dell'email di conferma.</p>
+
+      <h2>5. Spedizione e consegna</h2>
+      <p>Spedizione standard gratuita in 2–4 giorni lavorativi; spedizione express 24–48h disponibile a pagamento. I tempi indicati sono stimati e non vincolanti in caso di eventi eccezionali.</p>
+
+      <h2>6. Diritto di recesso</h2>
+      <p>Il Cliente consumatore ha diritto di recedere dal contratto entro 14 giorni dalla ricezione del prodotto, senza necessità di motivazione, secondo le modalità indicate nella pagina Assistenza. Il diritto di recesso non si applica ai prodotti personalizzati o su misura, ove previsto dalla legge.</p>
+
+      <h2>7. Resi e rimborsi</h2>
+      <p>I resi sono gratuiti entro 30 giorni dalla consegna. Il rimborso viene erogato entro 5 giorni lavorativi dal rientro e verifica del prodotto, con lo stesso metodo di pagamento utilizzato per l'acquisto.</p>
+
+      <h2>8. Garanzia legale di conformità</h2>
+      <p>Tutti i prodotti sono coperti dalla garanzia legale di conformità di 24 mesi prevista dal Codice del Consumo per i difetti esistenti al momento della consegna.</p>
+
+      <h2>9. Legge applicabile e foro competente</h2>
+      <p>Le presenti condizioni sono regolate dalla legge italiana. Per le controversie con Clienti consumatori è competente il foro del luogo di residenza del consumatore.</p>
+
+      <h2>10. Contatti</h2>
+      <p>Per qualsiasi domanda: <a href="mailto:info.drammis@gmail.com">info.drammis@gmail.com</a>.</p>
+    </section>
+    <div data-footer></div>
+  </section>
+
+  <!-- ============ PRIVACY POLICY ============ -->
+  <section class="view" data-view="privacy">
+    <button class="page-back" data-back aria-label="Torna indietro">
+      <svg viewBox="0 0 24 24"><line x1="20" y1="12" x2="6" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+      <span>Torna indietro</span>
+    </button>
+    <div class="shop-head">
+      <span class="eyebrow">Informazioni legali</span>
+      <h1 class="page-title">Privacy Policy</h1>
+    </div>
+    <section class="section section--shop legal">
+      <p class="legal__notice">Documento dimostrativo redatto secondo la struttura richiesta dal GDPR (Regolamento UE 2016/679). Prima della pubblicazione, fallo verificare da un legale o DPO e inserisci i dati reali del titolare del trattamento.</p>
+
+      <h2>1. Titolare del trattamento</h2>
+      <p>DRAMMIS [Ragione Sociale da inserire] — P.IVA [da inserire] — Milano, Italia. Contatto per la privacy: <a href="mailto:info.drammis@gmail.com">info.drammis@gmail.com</a>.</p>
+
+      <h2>2. Dati raccolti e finalità</h2>
+      <p>Raccogliamo i dati forniti volontariamente (nome, email, indirizzo, telefono) per: gestire account e ordini, elaborare pagamenti e spedizioni, rispondere a richieste di assistenza, inviare comunicazioni commerciali se hai dato consenso alla newsletter.</p>
+
+      <h2>3. Base giuridica</h2>
+      <p>Il trattamento si fonda sull'esecuzione del contratto di vendita, sull'adempimento di obblighi di legge (es. fiscali) e, per newsletter e cookie di analisi, sul consenso liberamente revocabile in ogni momento.</p>
+
+      <h2>4. Conservazione dei dati</h2>
+      <p>I dati sono conservati per il tempo necessario alle finalità indicate e, per gli obblighi fiscali, per il periodo previsto dalla legge (10 anni per la documentazione contabile).</p>
+
+      <h2>5. Destinatari dei dati</h2>
+      <p>I dati possono essere comunicati a corrieri per la spedizione, fornitori di servizi di pagamento e strumenti di email/analytics, nei limiti necessari all'erogazione del servizio.</p>
+
+      <h2>6. I tuoi diritti</h2>
+      <p>Ai sensi degli artt. 15-22 GDPR hai diritto di accesso, rettifica, cancellazione, limitazione, opposizione e portabilità dei tuoi dati. Puoi esercitare questi diritti scrivendo a <a href="mailto:info.drammis@gmail.com">info.drammis@gmail.com</a>. Hai inoltre diritto di reclamo al Garante per la protezione dei dati personali.</p>
+
+      <h2>7. Cookie</h2>
+      <p>Per i dettagli sui cookie utilizzati consulta la <a href="#" data-nav="cookie-policy">Cookie Policy</a>.</p>
+
+      <h2>8. Modifiche</h2>
+      <p>Questa informativa può essere aggiornata; la versione in vigore è sempre quella pubblicata su questa pagina.</p>
+    </section>
+    <div data-footer></div>
+  </section>
+
+  <!-- ============ COOKIE POLICY ============ -->
+  <section class="view" data-view="cookie-policy">
+    <button class="page-back" data-back aria-label="Torna indietro">
+      <svg viewBox="0 0 24 24"><line x1="20" y1="12" x2="6" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+      <span>Torna indietro</span>
+    </button>
+    <div class="shop-head">
+      <span class="eyebrow">Informazioni legali</span>
+      <h1 class="page-title">Cookie Policy</h1>
+    </div>
+    <section class="section section--shop legal">
+      <p class="legal__notice">Documento dimostrativo. Aggiornalo in base agli strumenti di analisi/marketing che attiverai realmente prima della pubblicazione.</p>
+
+      <h2>1. Cosa sono i cookie</h2>
+      <p>I cookie sono piccoli file (o tecnologie equivalenti come il localStorage del browser) che i siti salvano sul dispositivo dell'utente per ricordare informazioni tra una visita e l'altra.</p>
+
+      <h2>2. Cookie tecnici (sempre attivi)</h2>
+      <p>Usiamo il localStorage del browser per far funzionare carrello, preferiti e preferenza sul consenso cookie. Non richiedono consenso perché strettamente necessari al funzionamento del sito.</p>
+
+      <h2>3. Cookie di analisi (solo con consenso)</h2>
+      <p>Se scegli "Accetta tutti" nel banner, potremo attivare strumenti di analisi in forma aggregata per capire come viene usato il sito e migliorarlo. Puoi revocare il consenso in qualsiasi momento con il pulsante qui sotto.</p>
+
+      <h2>4. Servizi di terze parti</h2>
+      <p>Il sito carica i caratteri tipografici da Google Fonts, che può comportare il trasferimento dell'indirizzo IP ai server Google al momento del caricamento della pagina.</p>
+
+      <h2>5. Gestisci le tue preferenze</h2>
+      <p>Puoi cambiare la scelta fatta in qualsiasi momento:</p>
+      <button class="pill pill--dark" id="cookiePrefsBtn">Gestisci preferenze cookie</button>
+    </section>
+    <div data-footer></div>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER TEMPLATE (minimal editoriale) ===== -->
+<template id="footerTpl">
+  <footer class="footer footer--min">
+    <a href="#" class="footer__logo footer__logo--xl" data-nav="home">
+      <img src="assets/logo.png" alt="DRAMMIS" class="footer__logo-img"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'" />
+      <span class="logo__mark" style="display:none">DRAMMIS</span>
+    </a>
+    <nav class="footer__links">
+      <a href="#" data-nav="street">Street</a>
+      <a href="#" data-nav="luxo">Luxo</a>
+      <a href="#" data-nav="about">Fondazione</a>
+      <a href="#" data-nav="support">Assistenza</a>
+    </nav>
+    <div class="footer__social2">
+      <a href="https://www.instagram.com/drammis_ita" target="_blank" rel="noopener noreferrer">Instagram</a><a href="https://www.tiktok.com/@drammis_ita" target="_blank" rel="noopener noreferrer">TikTok</a><a href="#">Pinterest</a>
+    </div>
+    <form class="news-form footer__news2">
+      <input type="email" placeholder="Iscriviti alla newsletter" aria-label="Email" required />
+      <button type="submit" aria-label="Iscriviti">→</button>
+    </form>
+    <div class="footer__contact"><a href="mailto:info.drammis@gmail.com">info.drammis@gmail.com</a> — Milano, Italia</div>
+    <nav class="footer__legal">
+      <a href="#" data-nav="termini">Termini e Condizioni</a>
+      <a href="#" data-nav="privacy">Privacy Policy</a>
+      <a href="#" data-nav="cookie-policy">Cookie Policy</a>
+    </nav>
+    <div class="footer__copy">© 2026 DRAMMIS</div>
+  </footer>
+</template>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

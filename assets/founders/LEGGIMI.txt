@@ -1,0 +1,6 @@
+Metti qui le foto ritratto dei fondatori (formato verticale, es. 900x1200px):
+
+- daniel-marchica.jpg -> ritratto di Daniel Marchica
+- manuel-drammis.jpg  -> ritratto di Manuel Drammis
+
+Finché questi file non ci sono, il sito mostra automaticamente un riquadro con le iniziali (DM / MD) al loro posto: nessun errore, nessuna pagina rotta.

@@ -1,0 +1,7 @@
+{
+  "name": "atelier-luxe",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  }
+}

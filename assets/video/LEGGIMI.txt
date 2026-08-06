@@ -1,0 +1,7 @@
+Metti qui i tuoi video hero (formato .mp4, consigliato 1920x1080 o superiore, silenziosi, loop di 10-20s):
+
+- hero-home.mp4   -> hero della homepage (sezione video a schermo intero)
+- hero-street.mp4 -> hero della sezione STREET
+- hero-luxo.mp4   -> hero della sezione LUXO
+
+Finché questi file non ci sono, il sito mostra automaticamente una foto di sfondo al loro posto: nessun errore, nessuna pagina rotta.
