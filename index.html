@@ -43,7 +43,7 @@
 
 <!-- ===== COOKIE CONSENT ===== -->
 <div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Cookie" hidden>
-  <p>Usiamo cookie tecnici necessari al funzionamento del sito (carrello, preferiti, accesso) e, solo con il tuo consenso, cookie di analisi. <a href="#" data-nav="cookie-policy">Scopri di più</a></p>
+  <p>Usiamo cookie tecnici necessari al funzionamento del sito (carrello, accesso) e, solo con il tuo consenso, cookie di analisi. <a href="#" data-nav="cookie-policy">Scopri di più</a></p>
   <div class="cookie-banner__actions">
     <button class="pill pill--ghost" id="cookieDeny">Solo necessari</button>
     <button class="pill pill--dark" id="cookieAccept">Accetta tutti</button>
@@ -66,6 +66,9 @@
     </a>
 
     <nav class="header__zone header__zone--right" aria-label="Azioni">
+      <button class="icon-btn" id="assistantBtn" aria-label="Assistente virtuale">
+        <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      </button>
       <button class="icon-btn" id="searchBtn" aria-label="Cerca">
         <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
@@ -86,28 +89,16 @@
     <a href="#" class="search__logo" data-nav="home" aria-label="DRAMMIS home">
       <img src="assets/logo.png" alt="DRAMMIS" class="logo__img" onerror="this.style.display='none'" />
     </a>
-    <div class="search__bar">
+    <form class="search__bar" id="searchForm">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" id="searchInput" placeholder="Cerca prodotti, categorie…" autocomplete="off" />
-      <button class="search__close" id="searchClose" aria-label="Chiudi ricerca">✕</button>
-    </div>
+      <div class="search__field">
+        <div class="search__ghost" id="searchGhost" aria-hidden="true"></div>
+        <input type="text" id="searchInput" placeholder="Cerca prodotti, categorie…" autocomplete="off" />
+      </div>
+      <button type="submit" class="search__submit" aria-label="Cerca">→</button>
+      <button type="button" class="search__close" id="searchClose" aria-label="Chiudi ricerca">✕</button>
+    </form>
     <p class="search__meta" id="searchMeta">Inizia a digitare per cercare nella collezione.</p>
-    <div class="search__discovery" id="searchDiscovery">
-      <div class="search__block">
-        <span class="search__block-label">Ricerche di tendenza</span>
-        <div class="search__trends">
-          <button type="button" class="search__trend" data-trend="Sovrana">Sovrana</button>
-          <button type="button" class="search__trend" data-trend="Canvas Studs">Canvas Studs</button>
-          <button type="button" class="search__trend" data-trend="Cintura Nocturne">Cintura Nocturne</button>
-          <button type="button" class="search__trend" data-trend="Monogram">Monogram</button>
-          <button type="button" class="search__trend" data-trend="Street">Street</button>
-        </div>
-      </div>
-      <div class="search__block">
-        <span class="search__block-label">I più desiderati</span>
-        <div class="search__wanted" id="searchWanted"></div>
-      </div>
-    </div>
     <div class="grid grid--shop search__results" id="searchResults"></div>
   </div>
 </div>
@@ -512,9 +503,6 @@
           <p class="pdp__stock" id="pdpStock" hidden></p>
           <div class="pdp__actions">
             <button class="pill pill--dark pdp__add" id="pdpAdd">Aggiungi al carrello <em>→</em></button>
-            <button class="pdp__wish" id="pdpWish" aria-label="Aggiungi ai preferiti">
-              <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
-            </button>
           </div>
 
           <div class="pdp__section">
@@ -532,28 +520,6 @@
         </div>
       </div>
     </div>
-    <div data-footer></div>
-  </section>
-
-  <!-- ============ PREFERITI ============ -->
-  <section class="view" data-view="wishlist">
-    <button class="page-back" data-back aria-label="Torna indietro">
-      <svg viewBox="0 0 24 24"><line x1="20" y1="12" x2="6" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
-      <span>Torna indietro</span>
-    </button>
-    <div class="shop-head">
-      <span class="eyebrow">La tua selezione</span>
-      <h1 class="page-title">Preferiti</h1>
-      <p class="shop-head__sub" id="wishSub"></p>
-    </div>
-    <section class="section section--shop">
-      <div class="grid grid--shop" id="wishGrid"></div>
-      <div class="empty" id="wishEmpty" hidden>
-        <img class="empty__mascot" src="assets/mascots/ichi-cutout.png" alt="ICHI" loading="lazy" />
-        <p>ICHI non ha ancora nulla da custodire qui.</p>
-        <button class="pill pill--dark" data-nav="home">Scopri le collezioni <em>→</em></button>
-      </div>
-    </section>
     <div data-footer></div>
   </section>
 
@@ -826,7 +792,7 @@
       <p>I cookie sono piccoli file (o tecnologie equivalenti come il localStorage del browser) che i siti salvano sul dispositivo dell'utente per ricordare informazioni tra una visita e l'altra.</p>
 
       <h2>2. Cookie tecnici (sempre attivi)</h2>
-      <p>Usiamo il localStorage del browser per far funzionare carrello, preferiti e preferenza sul consenso cookie. Non richiedono consenso perché strettamente necessari al funzionamento del sito.</p>
+      <p>Usiamo il localStorage del browser per far funzionare carrello e preferenza sul consenso cookie. Non richiedono consenso perché strettamente necessari al funzionamento del sito.</p>
 
       <h2>3. Cookie di analisi (solo con consenso)</h2>
       <p>Se scegli "Accetta tutti" nel banner, potremo attivare strumenti di analisi in forma aggregata per capire come viene usato il sito e migliorarlo. Puoi revocare il consenso in qualsiasi momento con il pulsante qui sotto.</p>
@@ -873,6 +839,23 @@
     <div class="footer__copy">© 2026 DRAMMIS</div>
   </footer>
 </template>
+
+<!-- ===== ASSISTENTE VIRTUALE ===== -->
+<div class="chatbot" id="chatbot">
+  <div class="chatbot__panel" id="chatbotPanel" aria-hidden="true">
+    <div class="chatbot__head">
+      <span class="chatbot__title">Assistente Drammis <i class="chatbot__dot"></i></span>
+      <button class="chatbot__close" id="chatbotClose" aria-label="Chiudi assistenza">✕</button>
+    </div>
+    <div class="chatbot__messages" id="chatbotMessages">
+      <div class="chatbot__msg chatbot__msg--bot">Ciao! Sono l'assistente virtuale di DRAMMIS. Posso aiutarti con i prodotti, spedizioni, resi, taglie o lo stato di un tuo ordine. Come posso aiutarti?</div>
+    </div>
+    <form class="chatbot__form" id="chatbotForm">
+      <input type="text" id="chatbotInput" placeholder="Scrivi un messaggio…" autocomplete="off" />
+      <button type="submit" aria-label="Invia"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </form>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="script.js"></script>

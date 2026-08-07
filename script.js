@@ -60,10 +60,8 @@
   /* ---------- SHOP STATE (localStorage) ---------- */
   const store = {
     cart: load('dr_cart', []),
-    wish: load('dr_wish', []),
     save() {
       localStorage.setItem('dr_cart', JSON.stringify(this.cart));
-      localStorage.setItem('dr_wish', JSON.stringify(this.wish));
     },
   };
   function load(k, d) { try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } }
@@ -99,6 +97,7 @@
   const shippingCost = () => (subtotal() >= 500 || store.cart.length === 0 ? 0 : 15);
 
   function addToCart(id, size, color, qty) {
+    if (!ALL[id]) return false; // guardia: evita un crash se il pulsante viene premuto prima che la scheda prodotto sia pronta
     const max = ALL[id].stock;
     const line = store.cart.find((i) => i.id === id && i.size === size && i.color === color);
     const already = line ? line.qty : 0;
@@ -107,22 +106,12 @@
     store.save(); updateBadges();
     return next > already;
   }
-  function inWish(id) { return store.wish.includes(id); }
-  function toggleWish(id) {
-    const i = store.wish.indexOf(id);
-    if (i >= 0) store.wish.splice(i, 1); else store.wish.push(id);
-    store.save(); updateBadges();
-    document.querySelectorAll(`[data-fav="${id}"]`).forEach((b) => b.classList.toggle('is-on', inWish(id)));
-  }
-
   function updateBadges() {
     const c = document.getElementById('cartCount');
-    const w = document.getElementById('wishCount');
     if (c) { c.textContent = cartQtyTotal(); c.classList.toggle('is-empty', cartQtyTotal() === 0); }
-    if (w) { w.textContent = store.wish.length; w.classList.toggle('is-empty', store.wish.length === 0); }
   }
 
-  /* ---------- CARD BUILDER (editorial + wishlist) ---------- */
+  /* ---------- CARD BUILDER (editorial) ---------- */
   function card(p) {
     const el = document.createElement('article');
     el.className = 'card';
@@ -131,9 +120,6 @@
     el.innerHTML = `
       <div class="card__media">
         ${flag}
-        <button class="card__fav ${inWish(p.id) ? 'is-on' : ''}" data-fav="${p.id}" aria-label="Aggiungi ai preferiti">
-          <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
-        </button>
         <div class="card__img" role="img" aria-label="${p.name}" style="background-image:url('${IMG(p.img, 1100)}')"></div>
       </div>
       <div class="card__body">
@@ -207,7 +193,9 @@
     const active = document.querySelector('.view--active');
     const hero = active && active.querySelector('.hero');
     const heroH = hero ? hero.offsetHeight : 0;
-    const y = window.scrollY;
+    // col menu aperto il body è "position:fixed" per bloccare lo scroll: window.scrollY
+    // risulterebbe 0 anche se in realtà si era scorso più giù, facendo ringrandire il logo per errore
+    const y = document.body.style.position === 'fixed' ? lockedScrollY : window.scrollY;
     const isDark = heroH > 0 && y < heroH - 90;
     header.classList.toggle('is-solid', y > 40);
     header.classList.toggle('is-dark', isDark);
@@ -251,13 +239,37 @@
   const overlay = document.getElementById('drawerOverlay');
   const toggle = document.getElementById('menuToggle');
   const closeBtn = document.getElementById('drawerClose');
+  let lockedScrollY = 0;
+  function lockBodyScroll() {
+    // "overflow:hidden" da solo non blocca lo scroll touch su iOS/Android: blocchiamo
+    // il body in posizione fissa così la pagina sotto al menu non si muove più.
+    lockedScrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = -lockedScrollY + 'px';
+    document.body.style.width = '100%';
+    document.body.style.overflow = 'hidden';
+  }
+  function unlockBodyScroll() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    document.body.style.overflow = '';
+    // il sito ha "scroll-behavior: smooth" globale: senza "instant" qui la pagina
+    // scorrerebbe animata fino al punto giusto invece di scattarci subito
+    window.scrollTo({ top: lockedScrollY, left: 0, behavior: 'instant' });
+  }
   function openDrawer() {
     drawer.classList.add('is-open'); overlay.classList.add('is-open');
-    drawer.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden';
+    drawer.setAttribute('aria-hidden', 'false'); lockBodyScroll();
   }
   function closeDrawer() {
+    // switchView chiama closeDrawer() ad ogni cambio pagina come pulizia precauzionale:
+    // sblocchiamo lo scroll solo se il menu era davvero aperto, altrimenti la pagina
+    // veniva riportata in cima ad ogni navigazione, facendo "lampeggiare" il logo grande
+    const wasOpen = drawer.classList.contains('is-open');
     drawer.classList.remove('is-open'); overlay.classList.remove('is-open');
-    drawer.setAttribute('aria-hidden', 'true'); document.body.style.overflow = '';
+    drawer.setAttribute('aria-hidden', 'true');
+    if (wasOpen) unlockBodyScroll();
   }
   toggle.addEventListener('click', openDrawer);
   closeBtn.addEventListener('click', closeDrawer);
@@ -271,8 +283,7 @@
     document.body.classList.add('theme-' + t);
   }
 
-  /* ---------- VIEW NAVIGATION (soft fade) ---------- */
-  const transition = document.querySelector('.transition');
+  /* ---------- VIEW NAVIGATION (diretta, senza dissolvenza) ---------- */
   let animating = false;
   // pila di navigazione: ogni voce ricorda la vista lasciata E la posizione di scroll
   // che aveva, così "torna indietro" ripristina esattamente dove si era arrivati.
@@ -281,7 +292,6 @@
 
   function onEnter(view) {
     if (view === 'cart') renderCart();
-    else if (view === 'wishlist') renderWishlist();
     else if (view === 'checkout') renderCheckout();
     else if (view === 'account') { if (authMode !== 'recovery') authMode = 'login'; renderAccount(); }
   }
@@ -296,32 +306,24 @@
     if (!opts.back && current) navStack.push({ view: current.dataset.view, scrollY: window.scrollY });
     animating = true; closeDrawer();
 
-    transition.classList.add('is-active');
-    requestAnimationFrame(() => transition.classList.add('is-in'));
-
-    setTimeout(() => {
-      if (typeof prep === 'function') prep(target);
-      onEnter(view);
-      if (current) current.classList.remove('view--active');
-      target.classList.add('view--active');
-      setTheme(view);
-      if (window.gtag) window.gtag('event', 'page_view', { page_title: view, page_path: '/' + view });
-      const restoreY = opts.back && opts.scrollY ? opts.scrollY : 0;
+    if (typeof prep === 'function') prep(target);
+    onEnter(view);
+    if (current) current.classList.remove('view--active');
+    target.classList.add('view--active');
+    setTheme(view);
+    if (window.gtag) window.gtag('event', 'page_view', { page_title: view, page_path: '/' + view });
+    const restoreY = opts.back && opts.scrollY ? opts.scrollY : 0;
+    window.scrollTo({ top: restoreY, left: 0, behavior: 'instant' });
+    requestAnimationFrame(() => requestAnimationFrame(() => {
       window.scrollTo({ top: restoreY, left: 0, behavior: 'instant' });
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        window.scrollTo({ top: restoreY, left: 0, behavior: 'instant' });
-      }));
-      target.querySelectorAll('.reveal, .card, .pdp__shot').forEach((el) => el.classList.remove('in'));
-      requestAnimationFrame(() => observeReveals(target));
-      setTimeout(() => target.querySelectorAll('.hero .reveal, .about-hero .reveal, .page-head .reveal, .shop-head .reveal').forEach((el) => el.classList.add('in')), 60);
-      initVideos();
-      updateHeader();
+    }));
+    target.querySelectorAll('.reveal, .card, .pdp__shot').forEach((el) => el.classList.remove('in'));
+    requestAnimationFrame(() => observeReveals(target));
+    setTimeout(() => target.querySelectorAll('.hero .reveal, .about-hero .reveal, .page-head .reveal, .shop-head .reveal').forEach((el) => el.classList.add('in')), 60);
+    initVideos();
+    updateHeader();
 
-      transition.classList.remove('is-in');
-      setTimeout(() => {
-        transition.classList.remove('is-active'); animating = false;
-      }, 500);
-    }, 380);
+    animating = false;
   }
   function goTo(view) { switchView(view); }
   // torna indietro: riprende l'ultima vista lasciata, con lo scroll che aveva allora
@@ -377,7 +379,6 @@
       const mat = (p.specs.find((s) => /material/i.test(s[0])) || [null, 'Materiali pregiati'])[1];
       document.getElementById('pdpMaterials').textContent = `${mat}. Lavorazione artigianale, finiture a mano. Made in Italy.`;
 
-      const wishBtn = document.getElementById('pdpWish');
       const add = document.getElementById('pdpAdd');
       add.dataset.size = (p.sizes && p.sizes[0]) || 'Unica';
       add.firstChild.textContent = 'Aggiungi al carrello ';
@@ -390,8 +391,6 @@
         document.getElementById('pdpColors').innerHTML = p.colors
           .map((c, i) => `<button class="pdp__color${i === 0 ? ' is-active' : ''}" data-color="${c}" aria-label="${c}"><span class="pdp__sw" style="background:${swatch(c)}"></span></button>`).join('');
         setPdpColor(p.colors[0]);
-        wishBtn.dataset.fav = p.cartId || p.id;
-        wishBtn.classList.toggle('is-on', inWish(p.cartId || p.id));
         add.dataset.product = p.cartId || p.id;
         delete add.dataset.duo;
         updateStockNote(p.stock);
@@ -424,11 +423,6 @@
     }
     document.getElementById('pdpPrice').textContent = v.price;
     setPdpColor(v.label);
-
-    const wishBtn = document.getElementById('pdpWish');
-    const favId = v.key === 'duo' ? p.cartId : v.cartId;
-    wishBtn.dataset.fav = favId;
-    wishBtn.classList.toggle('is-on', inWish(favId));
 
     const add = document.getElementById('pdpAdd');
     if (v.key === 'duo') {
@@ -549,18 +543,7 @@
       });
   }
 
-  /* ---------- CART / WISHLIST / CHECKOUT RENDERERS ---------- */
-  function renderWishlist() {
-    const grid = document.getElementById('wishGrid');
-    const empty = document.getElementById('wishEmpty');
-    const sub = document.getElementById('wishSub');
-    const items = store.wish.map((id) => ALL[id]).filter(Boolean);
-    sub.textContent = items.length ? `${items.length} ${items.length === 1 ? 'pezzo salvato' : 'pezzi salvati'}` : '';
-    empty.hidden = items.length > 0;
-    grid.innerHTML = '';
-    items.forEach((p) => grid.appendChild(card(p)));
-  }
-
+  /* ---------- CART / CHECKOUT RENDERERS ---------- */
   function renderCart() {
     const wrap = document.getElementById('cartItems');
     const sum = document.getElementById('cartSummary');
@@ -629,16 +612,22 @@
   /* ---------- SEARCH ---------- */
   const search = document.getElementById('search');
   const searchInput = document.getElementById('searchInput');
-  const searchDiscovery = document.getElementById('searchDiscovery');
-  const wantedGrid = document.getElementById('searchWanted');
-  if (wantedGrid) {
-    // "Più desiderati" = le edizioni limitate con meno pezzi rimasti — scarsità reale, non una lista fissa
-    Object.values(ALL)
-      .filter((p) => p.lim)
-      .sort((a, b) => a.stock - b.stock)
-      .slice(0, 2)
-      .forEach((p) => wantedGrid.appendChild(card(p)));
-    observeReveals(wantedGrid);
+  const searchGhost = document.getElementById('searchGhost');
+  const productNameList = Object.values(ALL).map((p) => p.name);
+  // trova il primo nome prodotto che inizia con quello che l'utente sta scrivendo
+  function matchSuggestion(typed) {
+    if (!typed) return null;
+    const lower = typed.toLowerCase();
+    const found = productNameList.find((name) => name.toLowerCase().startsWith(lower) && name.length > typed.length);
+    return found || null;
+  }
+  function updateGhost() {
+    if (!searchGhost) return;
+    const typed = searchInput.value;
+    const suggestion = matchSuggestion(typed);
+    searchGhost.innerHTML = suggestion
+      ? `<em>${typed}</em><span>${suggestion.slice(typed.length)}</span>`
+      : '';
   }
   function openSearch() {
     search.classList.add('is-open'); search.setAttribute('aria-hidden', 'false');
@@ -655,36 +644,41 @@
     const query = q.trim().toLowerCase();
     if (!query) {
       res.innerHTML = ''; meta.textContent = 'Inizia a digitare per cercare nella collezione.';
-      if (searchDiscovery) searchDiscovery.hidden = false;
       return;
     }
-    if (searchDiscovery) searchDiscovery.hidden = true;
     const hits = Object.values(ALL).filter((p) =>
       (p.name + ' ' + p.cat + ' ' + p.desc).toLowerCase().includes(query));
     meta.textContent = hits.length ? `${hits.length} risultati per “${q.trim()}”` : `Nessun risultato per “${q.trim()}”`;
     res.innerHTML = '';
     hits.forEach((p) => res.appendChild(card(p)));
+    observeReveals(res); // le card create qui non erano mai "osservate": restavano invisibili (opacity:0)
   }
   document.getElementById('searchBtn').addEventListener('click', openSearch);
   document.getElementById('searchClose').addEventListener('click', closeSearch);
-  document.addEventListener('click', (e) => {
-    const trend = e.target.closest('.search__trend');
-    if (trend) { searchInput.value = trend.dataset.trend; runSearch(trend.dataset.trend); searchInput.focus(); }
+  searchInput.addEventListener('input', (e) => { runSearch(e.target.value); updateGhost(); });
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab' || e.key === 'ArrowRight') {
+      const suggestion = matchSuggestion(searchInput.value);
+      const atEnd = searchInput.selectionStart === searchInput.value.length;
+      if (suggestion && (e.key === 'Tab' || atEnd)) {
+        e.preventDefault();
+        searchInput.value = suggestion;
+        runSearch(suggestion);
+        updateGhost();
+      }
+    }
   });
-  searchInput.addEventListener('input', (e) => runSearch(e.target.value));
+  document.getElementById('searchForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const suggestion = matchSuggestion(searchInput.value);
+    if (suggestion) searchInput.value = suggestion; // completa col suggerimento prima di cercare
+    runSearch(searchInput.value);
+    updateGhost();
+    searchInput.blur(); // chiude la tastiera su mobile dopo l'invio
+  });
 
   /* ---------- GLOBAL CLICK ROUTER ---------- */
   document.addEventListener('click', (e) => {
-    // wishlist heart (cards + pdp)
-    const fav = e.target.closest('[data-fav]');
-    if (fav) {
-      e.preventDefault(); e.stopPropagation();
-      toggleWish(fav.dataset.fav);
-      fav.classList.toggle('is-on', inWish(fav.dataset.fav));
-      if (document.querySelector('.view--active').dataset.view === 'wishlist') renderWishlist();
-      return;
-    }
-
     // nav links / buttons
     const nav = e.target.closest('[data-nav]');
     if (nav) { e.preventDefault(); closeSearch(); goTo(nav.dataset.nav); return; }
@@ -1040,6 +1034,89 @@
       });
     }, { threshold: 0.5 });
     els.forEach((el) => io2.observe(el));
+  })();
+
+  /* ---------- ASSISTENTE VIRTUALE (chatbot) ---------- */
+  (function chatbot() {
+    const headerBtn = document.getElementById('assistantBtn');
+    const panel = document.getElementById('chatbotPanel');
+    const closeBtn = document.getElementById('chatbotClose');
+    const form = document.getElementById('chatbotForm');
+    const input = document.getElementById('chatbotInput');
+    const list = document.getElementById('chatbotMessages');
+    if (!panel || !form) return;
+
+    let history = []; // {role:'user'|'assistant', content:string} — solo testo semplice lato client
+    let sending = false;
+
+    // blocca lo scroll del body mentre la chat è aperta: su mobile, quando si apre la
+    // tastiera, senza questo il browser scrolla/zooma la pagina sotto al pannello fisso
+    // facendolo sembrare "saltare" verso l'alto
+    let lockedScrollY = 0;
+    function lockBodyScroll() {
+      lockedScrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = -lockedScrollY + 'px';
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+    }
+    function unlockBodyScroll() {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+      window.scrollTo({ top: lockedScrollY, left: 0, behavior: 'instant' });
+    }
+
+    function addBubble(text, who) {
+      const el = document.createElement('div');
+      el.className = 'chatbot__msg chatbot__msg--' + who;
+      el.textContent = text;
+      list.appendChild(el);
+      list.scrollTop = list.scrollHeight;
+      return el;
+    }
+
+    function toggleOpen() {
+      const isOpen = panel.classList.toggle('is-open');
+      panel.setAttribute('aria-hidden', String(!isOpen));
+      if (isOpen) { lockBodyScroll(); setTimeout(() => input.focus(), 200); }
+      else unlockBodyScroll();
+    }
+    if (headerBtn) headerBtn.addEventListener('click', toggleOpen);
+    closeBtn.addEventListener('click', () => {
+      panel.classList.remove('is-open');
+      panel.setAttribute('aria-hidden', 'true');
+      unlockBodyScroll();
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text || sending) return;
+      sending = true;
+      addBubble(text, 'user');
+      history.push({ role: 'user', content: text });
+      input.value = '';
+
+      const typing = addBubble('Sto scrivendo…', 'typing');
+
+      try {
+        const user = currentUser();
+        const { data, error } = await supa.functions.invoke('chat-support', {
+          body: { messages: history, customerEmail: user ? user.email : null },
+        });
+        typing.remove();
+        if (error || !data || !data.reply) throw error || new Error('Nessuna risposta');
+        addBubble(data.reply, 'bot');
+        history.push({ role: 'assistant', content: data.reply });
+      } catch (err) {
+        typing.remove();
+        addBubble('Scusa, in questo momento non riesco a risponderti. Riprova tra poco o scrivi a info.drammis@gmail.com.', 'bot');
+      } finally {
+        sending = false;
+      }
+    });
   })();
 
   /* ---------- INIT ---------- */
