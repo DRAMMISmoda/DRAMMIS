@@ -1414,7 +1414,8 @@ body.theme-street{
 .countdown--min .cd{background:none;border:none;-webkit-backdrop-filter:none;backdrop-filter:none;min-width:auto;padding:0;border-radius:0}
 .countdown--min .cd span{font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:500}
 .countdown--min .cd small{opacity:.62;letter-spacing:.18em}
-.btn-ghost{display:inline-flex;align-items:center;gap:.6rem;padding:.95rem 2.1rem;border:1px solid rgba(255,255,255,.5);border-radius:3px;color:#fff;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;font-weight:500;transition:background .6s var(--ease-soft),color .6s var(--ease-soft),border-color .6s}
+.btn-ghost{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;padding:.95rem 2.1rem;border:1px solid rgba(255,255,255,.5);border-radius:3px;color:#fff;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;font-weight:500;transition:background .6s var(--ease-soft),color .6s var(--ease-soft),border-color .6s}
+.btn-ghost span{margin-right:-.24em}
 .btn-ghost:hover{background:#fff;color:#000;border-color:#fff}
 
 /* ---- FEATURED (due pezzi editoriali) ---- */
