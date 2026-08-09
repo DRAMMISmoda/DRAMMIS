@@ -7,6 +7,11 @@
 <meta name="description" content="DRAMMIS — Maison di cinture contemporanea. Due mondi, Luxo e Street, una sola visione di eleganza." />
 <link rel="icon" type="image/png" href="assets/logo.png" />
 <meta name="theme-color" content="#141414" />
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="assets/icon-192.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="apple-mobile-web-app-title" content="DRAMMIS" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="DRAMMIS" />
 <meta property="og:title" content="DRAMMIS — Cinture Luxo & Street" />
@@ -622,6 +627,21 @@
     <div data-footer></div>
   </section>
 
+  <!-- ============ DASHBOARD (privata) ============ -->
+  <section class="view" data-view="admin">
+    <button class="page-back" data-back aria-label="Torna indietro">
+      <svg viewBox="0 0 24 24"><line x1="20" y1="12" x2="6" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+      <span>Torna indietro</span>
+    </button>
+    <div class="shop-head">
+      <span class="eyebrow">Area riservata</span>
+      <h1 class="page-title">Dashboard</h1>
+    </div>
+    <section class="section section--shop">
+      <div class="admin" id="adminPanel"></div>
+    </section>
+  </section>
+
   <!-- ============ ASSISTENZA ============ -->
   <section class="view" data-view="support">
     <button class="page-back" data-back aria-label="Torna indietro">
@@ -847,6 +867,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script src="script.js"></script>
 </body>
 </html>
