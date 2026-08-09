@@ -25,16 +25,12 @@
 
   const products = {
     street: [
-      P({ name:'Street Black Belt LUMA Buckle', cat:'Street', price:'€150', tag:'Nuovo', img:'assets/products/street-nera.jpg', gallery:['1624222247344-550fb60583dc','1629958513881-a086d21383cd'], colors:['Nero'], pair:{img:'assets/products/street-bianca.jpg',color:'Bianco'}, specs:[['Materiale','Pelle crust artigianale'],['Fibbia','Zamak'],['Codice','STREETBLK'],['Origine','Made in Italy']], desc:'Cintura in pelle crust artigianale con fibbia LUMA in zamak. Costruzione robusta, anima urbana. Made in Italy.' }),
-      P({ name:'Street White Belt LUMA Buckle', cat:'Street', price:'€150', img:'assets/products/street-bianca.jpg', gallery:['1679759022456-a7eae2257ba2','1611858288848-8d864a7a8738'], colors:['Bianco'], pair:{img:'assets/products/street-nera.jpg',color:'Nero'}, specs:[['Materiale','Pelle crust artigianale'],['Fibbia','Zamak'],['Codice','STREETWHT'],['Origine','Made in Italy']], desc:'Cintura in pelle crust artigianale con fibbia LUMA in zamak. Costruzione robusta, anima urbana. Made in Italy.' }),
-      P({ name:'Canvas Studs',      cat:'Street', price:'€165', tag:'Icona', lim:true, stock:5, img:'1631160246898-58192f971b5f', gallery:['1635100299010-0410d7434a93','1642166900939-4f6b9db890ca'], colors:['Nero','Indaco'], desc:'Cintura in canvas rinforzato con borchie applicate a mano e fibbia scultorea. Un pezzo che segna il carattere.' }),
-      P({ name:'Metro Reversibile', cat:'Street', price:'€195', img:'1665573708655-7320ed78bbeb', gallery:['1664285612706-b32633c95820','1644258676710-ffb99d7d7a1b'], colors:['Nero','Kaki'], desc:'Cintura reversibile in pelle e nylon tecnico. Due anime, un solo gesto per cambiarle.' }),
+      P({ name:'Street Black Belt MM Monogram', cat:'Street', price:'€150', tag:'Nuovo', img:'assets/products/street-nera.jpg', gallery:['1624222247344-550fb60583dc','1629958513881-a086d21383cd'], colors:['Nero'], pair:{img:'assets/products/street-bianca.jpg',color:'Bianco'}, specs:[['Materiale','Pelle crust artigianale'],['Fibbia','Zamak'],['Codice','STREETBLK'],['Origine','Made in Italy']], desc:'Cintura in pelle crust artigianale con monogramma MM e fibbia in zamak. Costruzione robusta, anima urbana. Made in Italy.' }),
+      P({ name:'Street White Belt MM Monogram', cat:'Street', price:'€150', img:'assets/products/street-bianca.jpg', gallery:['1679759022456-a7eae2257ba2','1611858288848-8d864a7a8738'], colors:['Bianco'], pair:{img:'assets/products/street-nera.jpg',color:'Nero'}, specs:[['Materiale','Pelle crust artigianale'],['Fibbia','Zamak'],['Codice','STREETWHT'],['Origine','Made in Italy']], desc:'Cintura in pelle crust artigianale con monogramma MM e fibbia in zamak. Costruzione robusta, anima urbana. Made in Italy.' }),
     ],
     luxo: [
       P({ name:'Luxo Black Belt MM Monogram', cat:'Luxo', price:'€250', tag:'Icona', lim:true, stock:6, img:'assets/products/luxo-nera.jpg', gallery:['1637868796504-32f45a96d5a0','1531188929123-0cfa61e6c770'], colors:['Nero'], pair:{img:'assets/products/luxo-bianca.jpg',color:'Bianco'}, specs:[['Materiale','Pelle canvas artigianale'],['Fibbia','Zamak'],['Codice','LUXOBLK'],['Origine','Made in Italy']], desc:'Cintura in pelle canvas artigianale con monogramma MM e fibbia in zamak. L’essenza dell’alta manifattura. Made in Italy.' }),
       P({ name:'Luxo White Belt MM Monogram', cat:'Luxo', price:'€250', lim:true, stock:3, img:'assets/products/luxo-bianca.jpg', gallery:['1684510334550-0c4fa8aaffd1','1543331904-0369ab9e25f3'], colors:['Bianco'], specs:[['Materiale','Pelle canvas artigianale'],['Fibbia','Zamak'],['Codice','LUXOWHT'],['Origine','Made in Italy']], desc:'Cintura in pelle canvas artigianale con monogramma MM e fibbia in zamak. L’essenza dell’alta manifattura. Made in Italy.' }),
-      P({ name:'Sovrana',    cat:'Luxo', price:'€720', tag:'Nuovo', img:'1711443982852-b3df5c563448', gallery:['1664286022075-8e997e95bd17','1717156816269-89f5f968db8b'], colors:['Nero','Cammello'], desc:'Cintura in vitello pieno fiore con fibbia scultorea firmata. Una silhouette che non passa inosservata.' }),
-      P({ name:'Héritage',   cat:'Luxo', price:'€580', img:'1705493655920-20c572928501', gallery:['1664286074240-d7059e004dff','1628483211662-9bcc692c46dc'], colors:['Nero','Cognac','Panna'], desc:'Cintura senza tempo in pelle vacchetta conciata al vegetale. L’essenziale della maison, per sempre.' }),
     ],
   };
 
@@ -44,7 +40,7 @@
   /* ---------- ENTRY DEDICATA AL BOX LUNGO STREET — foto editoriale nero+bianco insieme ---------- */
   const streetDuo = Object.assign({}, products.street[0], {
     id: 'streetDuo',
-    name: 'Street Belt LUMA Buckle',
+    name: 'Street Belt MM Monogram',
     colors: ['Nero', 'Bianco'],
     cartId: products.street[0].id,
     heroDuo: { mobile: 'assets/products/street-duo-official.jpg', desktop: 'assets/products/street-duo-official-desktop.jpg' },

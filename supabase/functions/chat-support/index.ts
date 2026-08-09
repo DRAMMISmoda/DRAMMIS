@@ -14,14 +14,10 @@ const supabase = createClient(
 );
 
 const PRODUCTS = [
-  { name: "Street Black Belt LUMA Buckle", cat: "Street", price: "€150", colors: ["Nero"], sizes: ["90", "95", "100", "105", "110"], limited: false, desc: "Cintura in pelle crust artigianale con fibbia LUMA in zamak. Costruzione robusta, anima urbana. Made in Italy." },
-  { name: "Street White Belt LUMA Buckle", cat: "Street", price: "€150", colors: ["Bianco"], sizes: ["90", "95", "100", "105", "110"], limited: false, desc: "Cintura in pelle crust artigianale con fibbia LUMA in zamak. Costruzione robusta, anima urbana. Made in Italy." },
-  { name: "Canvas Studs", cat: "Street", price: "€165", colors: ["Nero", "Indaco"], sizes: ["90", "95", "100", "105", "110"], limited: true, desc: "Cintura in canvas rinforzato con borchie applicate a mano e fibbia scultorea. Edizione limitata e numerata." },
-  { name: "Metro Reversibile", cat: "Street", price: "€195", colors: ["Nero", "Kaki"], sizes: ["90", "95", "100", "105", "110"], limited: false, desc: "Cintura reversibile in pelle e nylon tecnico. Due anime, un solo gesto per cambiarle." },
+  { name: "Street Black Belt MM Monogram", cat: "Street", price: "€150", colors: ["Nero"], sizes: ["90", "95", "100", "105", "110"], limited: false, desc: "Cintura in pelle crust artigianale con monogramma MM e fibbia in zamak. Costruzione robusta, anima urbana. Made in Italy." },
+  { name: "Street White Belt MM Monogram", cat: "Street", price: "€150", colors: ["Bianco"], sizes: ["90", "95", "100", "105", "110"], limited: false, desc: "Cintura in pelle crust artigianale con monogramma MM e fibbia in zamak. Costruzione robusta, anima urbana. Made in Italy." },
   { name: "Luxo Black Belt MM Monogram", cat: "Luxo", price: "€250", colors: ["Nero"], sizes: ["90", "95", "100", "105", "110"], limited: true, desc: "Cintura in pelle canvas artigianale con monogramma MM e fibbia in zamak. Edizione limitata e numerata. Made in Italy." },
   { name: "Luxo White Belt MM Monogram", cat: "Luxo", price: "€250", colors: ["Bianco"], sizes: ["90", "95", "100", "105", "110"], limited: true, desc: "Cintura in pelle canvas artigianale con monogramma MM e fibbia in zamak. Edizione limitata e numerata. Made in Italy." },
-  { name: "Sovrana", cat: "Luxo", price: "€720", colors: ["Nero", "Cammello"], sizes: ["90", "95", "100", "105", "110"], limited: false, desc: "Cintura in vitello pieno fiore con fibbia scultorea firmata. Una silhouette che non passa inosservata." },
-  { name: "Héritage", cat: "Luxo", price: "€580", colors: ["Nero", "Cognac", "Panna"], sizes: ["90", "95", "100", "105", "110"], limited: false, desc: "Cintura senza tempo in pelle vacchetta conciata al vegetale. L'essenziale della maison, per sempre." },
 ];
 
 const SYSTEM_PROMPT = `Sei l'assistente virtuale di DRAMMIS, una maison italiana di cinture che unisce alta sartoria (linea Luxo) e streetwear (linea Street). Rispondi sempre in italiano, con un tono elegante, cordiale e diretto. Risposte brevi e concrete, non robotiche.
