@@ -29,7 +29,9 @@ SPEDIZIONI: Spedizione standard gratuita in 2-4 giorni lavorativi in Italia e UE
 
 PAGAMENTI: Carta di credito, PayPal, Apple Pay e Google Pay.
 
-RESI: Resi gratuiti entro 30 giorni dalla consegna. Si avvia la pratica dall'account o contattando il client service; arriva un'etichetta prepagata. Rimborso entro 5 giorni lavorativi dal rientro del prodotto.
+RESI: Resi gratuiti entro 30 giorni dalla consegna. Si può avviare la pratica direttamente qui in chat (ti servono le prime 8 cifre dell'ID ordine e l'email usata per l'acquisto) oppure scrivendo al client service. Dopo l'avvio, il team ti ricontatta via email con l'etichetta prepagata. Rimborso entro 5 giorni lavorativi dal rientro del prodotto.
+
+AVVIO RESO: Se il cliente vuole avviare (non solo capire come funziona) il reso di un ordine specifico: 1) usa lookup_order per verificare che l'ordine esista, sia suo ed entro 30 giorni dalla data indicata; 2) chiedi conferma esplicita al cliente prima di procedere e chiedi il motivo (facoltativo); 3) solo dopo la conferma, usa request_return. Dopo un request_return riuscito, di' al cliente che la richiesta è stata registrata con un numero di riferimento e che il team la confermerà via email con l'etichetta prepagata — NON dire che l'etichetta è già stata inviata, perché non è automatico. Se request_return fallisce con "already_requested", di' che esiste già una richiesta per quell'ordine e di controllare la sua email. Se fallisce con "expired", spiega che sono passati più di 30 giorni e invita a scrivere a info.drammis@gmail.com. Se fallisce con "system_error", di' che c'è un problema tecnico temporaneo (NON che i dati sono sbagliati) e invita a riprovare o scrivere via email.
 
 DIRITTO DI RECESSO: Per legge (Codice del Consumo), il cliente consumatore ha 14 giorni di calendario dal ricevimento della merce per recedere dall'acquisto senza motivazione, scrivendo a info.drammis@gmail.com. Questo è distinto dalla policy resi di 30 giorni, che è più generosa: nella pratica indica sempre i 30 giorni al cliente, salvo chieda esplicitamente dei termini di legge.
 
@@ -64,25 +66,84 @@ const tools: Anthropic.Tool[] = [
       required: ["order_id_prefix", "email"],
     },
   },
+  {
+    name: "request_return",
+    description: "Registra davvero una richiesta di reso per un ordine specifico nel database. Usa questo strumento SOLO dopo aver già verificato l'ordine con lookup_order (esiste, appartiene al cliente, entro 30 giorni) e dopo che il cliente ha confermato di voler procedere col reso. Non usarlo per domande generiche su come funzionano i resi.",
+    input_schema: {
+      type: "object",
+      properties: {
+        order_id_prefix: { type: "string", description: "Le prime 8 cifre dell'ID ordine, già verificate con lookup_order" },
+        email: { type: "string", description: "Email del cliente, già verificata con lookup_order" },
+        reason: { type: "string", description: "Motivo del reso indicato dal cliente, se lo ha fornito" },
+      },
+      required: ["order_id_prefix", "email"],
+    },
+  },
 ];
 
-async function lookupOrder(orderIdPrefix: string, email: string) {
+async function findOrder(orderIdPrefix: string, email: string) {
   const { data, error } = await supabase
     .from("orders")
     .select("id, created_at, status, total, email, order_items(name, qty, size, color)")
     .ilike("email", email.trim())
-    .like("id", `${orderIdPrefix}%`)
-    .limit(1)
-    .maybeSingle();
-  if (error || !data) return { found: false };
+    .limit(50);
+  if (error) {
+    console.error("findOrder error:", error);
+    return { error: true };
+  }
+  const prefix = orderIdPrefix.trim().toLowerCase();
+  const match = (data || []).find((o) => String(o.id).toLowerCase().startsWith(prefix));
+  return { error: false, order: match || null };
+}
+
+async function lookupOrder(orderIdPrefix: string, email: string) {
+  const { error, order } = await findOrder(orderIdPrefix, email);
+  if (error) return { found: false, system_error: true };
+  if (!order) return { found: false };
   return {
     found: true,
-    order_id: String(data.id).slice(0, 8),
-    date: data.created_at,
-    status: data.status,
-    total: data.total,
-    items: data.order_items,
+    order_id: String(order.id).slice(0, 8),
+    date: order.created_at,
+    status: order.status,
+    total: order.total,
+    items: order.order_items,
   };
+}
+
+async function requestReturn(orderIdPrefix: string, email: string, reason?: string) {
+  const { error: findErr, order } = await findOrder(orderIdPrefix, email);
+
+  if (findErr) {
+    console.error("requestReturn lookup error");
+    return { success: false, reason: "system_error" };
+  }
+  if (!order) return { success: false, reason: "order_not_found" };
+
+  const daysSince = (Date.now() - new Date(order.created_at).getTime()) / (1000 * 60 * 60 * 24);
+  if (daysSince > 30) return { success: false, reason: "expired", days_since: Math.floor(daysSince) };
+
+  const { data: existing, error: existingErr } = await supabase
+    .from("returns")
+    .select("id")
+    .eq("order_id", order.id)
+    .maybeSingle();
+  if (existingErr) {
+    console.error("requestReturn existing-check error:", existingErr);
+    return { success: false, reason: "system_error" };
+  }
+  if (existing) return { success: false, reason: "already_requested" };
+
+  const { data: inserted, error: insertErr } = await supabase
+    .from("returns")
+    .insert({ order_id: order.id, email: email.trim(), reason: reason || null })
+    .select("id")
+    .maybeSingle();
+
+  if (insertErr || !inserted) {
+    console.error("requestReturn insert error:", insertErr);
+    return { success: false, reason: "system_error" };
+  }
+  return { success: true, return_id: String(inserted.id).slice(0, 8) };
 }
 
 serve(async (req) => {
@@ -111,6 +172,18 @@ serve(async (req) => {
         if (toolUse && toolUse.name === "lookup_order") {
           const input = toolUse.input as { order_id_prefix: string; email: string };
           const result = await lookupOrder(input.order_id_prefix, input.email);
+          conversation = [
+            ...conversation,
+            {
+              role: "user",
+              content: [{ type: "tool_result", tool_use_id: toolUse.id, content: JSON.stringify(result) }],
+            },
+          ];
+          continue;
+        }
+        if (toolUse && toolUse.name === "request_return") {
+          const input = toolUse.input as { order_id_prefix: string; email: string; reason?: string };
+          const result = await requestReturn(input.order_id_prefix, input.email, input.reason);
           conversation = [
             ...conversation,
             {

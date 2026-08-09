@@ -892,6 +892,7 @@ body.theme-street .grid--3{gap:clamp(26px,3vw,48px)}
 .co-block{border:none;padding:0;margin:0}
 .co-block legend{font-size:.76rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;margin-bottom:1.2rem}
 .co-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.co-grid[hidden]{display:none}
 .co-full{grid-column:1/-1}
 .checkout-form label{display:flex;flex-direction:column;gap:.5rem;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .checkout-form input{padding:.9rem 1rem;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--fg);font-family:inherit;font-size:.95rem;outline:none;transition:border-color .3s}
@@ -916,6 +917,7 @@ body.theme-street .grid--3{gap:clamp(26px,3vw,48px)}
 .co-line__info span{color:var(--muted);font-size:.74rem}
 .co-line__price{font-family:'Urbanist',sans-serif;font-weight:500;font-size:.95rem;letter-spacing:.01em}
 .co-done{text-align:center;max-width:540px;margin:0 auto;padding:clamp(30px,6vw,70px) 0;display:flex;flex-direction:column;align-items:center;gap:1.3rem}
+.co-done[hidden]{display:none}
 .co-done__mark{width:72px;height:72px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-size:2rem}
 .co-done p{color:var(--muted);line-height:1.7}
 @media(max-width:860px){.checkout-layout{grid-template-columns:1fr}.checkout-summary{position:static;order:-1}.co-grid,.pay-methods{grid-template-columns:1fr}}
