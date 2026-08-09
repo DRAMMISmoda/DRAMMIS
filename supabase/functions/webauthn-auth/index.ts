@@ -6,8 +6,8 @@ import {
 } from "npm:@simplewebauthn/server@9";
 
 // Deve combaciare con i valori usati in webauthn-register.
-const RP_ID = "drammismoda.github.io";
-const ORIGIN = "https://drammismoda.github.io";
+const RP_ID = "drammis.vercel.app";
+const ORIGIN = "https://drammis.vercel.app";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",

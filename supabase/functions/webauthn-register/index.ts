@@ -6,8 +6,8 @@ import {
 } from "npm:@simplewebauthn/server@9";
 
 // Cambia questi due valori se il sito viene servito da un dominio diverso.
-const RP_ID = "drammismoda.github.io";
-const ORIGIN = "https://drammismoda.github.io";
+const RP_ID = "drammis.vercel.app";
+const ORIGIN = "https://drammis.vercel.app";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
