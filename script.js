@@ -91,7 +91,9 @@
   supa.auth.onAuthStateChange((event, sess) => {
     authSession = sess;
     if (event === 'PASSWORD_RECOVERY') { authMode = 'recovery'; goTo('account'); }
-    if (document.querySelector('.view--active') && document.querySelector('.view--active').dataset.view === 'account') renderAccount();
+    const activeView = document.querySelector('.view--active') && document.querySelector('.view--active').dataset.view;
+    if (activeView === 'account') renderAccount();
+    if (activeView === 'admin') renderAdmin();
     if (event === 'INITIAL_SESSION' && location.hash === '#admin') goTo('admin');
   });
 
@@ -506,8 +508,8 @@
     };
   }
 
-  async function setupPasskey() {
-    const msg = document.getElementById('passkeyMsg');
+  async function setupPasskey(msgId) {
+    const msg = document.getElementById(msgId || 'passkeyMsg');
     const show = (t) => { if (msg) { msg.hidden = false; msg.textContent = t; } };
     try {
       show('Preparazione…');
@@ -526,8 +528,8 @@
     }
   }
 
-  async function loginWithPasskey(email) {
-    const msg = document.getElementById('loginMsg');
+  async function loginWithPasskey(email, msgId) {
+    const msg = document.getElementById(msgId || 'loginMsg');
     const show = (t) => { if (msg) { msg.hidden = false; msg.textContent = t; } };
     if (!email) { show('Scrivi prima la tua email qui sopra.'); return; }
     try {
@@ -564,9 +566,6 @@
           <h3>Bentornato, ${user.firstname}</h3>
           <p>Hai effettuato l'accesso come <strong>${user.email}</strong>.</p>
           <button class="pill pill--ghost" id="logoutBtn">Esci <em>→</em></button>
-          ${passkeySupported() ? `
-          <button class="pill pill--ghost" id="passkeySetupBtn" style="margin-top:.6rem">Attiva Face ID / Touch ID <em>→</em></button>
-          <p class="account__msg" id="passkeyMsg" hidden></p>` : ''}
         </div>
         <div class="account__panel account__panel--wide">
           <h3>I tuoi ordini</h3>
@@ -614,7 +613,6 @@
           <button class="pill pill--dark" type="submit">Accedi <em>→</em></button>
           <a class="account__link" href="#" id="forgotLink">Password dimenticata?</a>
         </form>
-        ${passkeySupported() ? `<button class="pill pill--ghost" id="passkeyLoginBtn" style="margin-top:.8rem">Sblocca con Face ID <em>→</em></button>` : ''}
         <p class="account__msg" id="loginMsg" hidden></p>
       </div>
       <div class="account__panel account__panel--alt">
@@ -669,19 +667,35 @@
   };
   let adminChart = null;
 
+  function renderAdminLoginGate() {
+    const panel = document.getElementById('adminPanel');
+    if (!panel) return;
+    panel.innerHTML = `
+      <div class="account__panel" style="max-width:420px;margin:0 auto">
+        <h3>Area riservata</h3>
+        <form class="account-form" id="adminLoginForm" novalidate>
+          <label>Email<input type="email" name="email" required></label>
+          <label>Password<input type="password" name="password" required></label>
+          <button class="pill pill--dark" type="submit">Accedi <em>→</em></button>
+        </form>
+        ${passkeySupported() ? `<button class="pill pill--ghost" id="adminPasskeyLoginBtn" style="margin-top:.8rem">Sblocca con Face ID <em>→</em></button>` : ''}
+        <p class="account__msg" id="adminLoginMsg" hidden></p>
+      </div>`;
+  }
+
   function renderAdmin() {
     const panel = document.getElementById('adminPanel');
     if (!panel) return;
     const user = currentUser();
-    if (!user) { goTo('home'); return; }
+    if (!user) { renderAdminLoginGate(); return; }
     panel.innerHTML = `<p class="account__msg">Verifica accesso…</p>`;
     supa.from('admins').select('user_id').eq('user_id', user.id).maybeSingle()
       .then(({ data }) => {
         if (!panel.isConnected) return; // l'utente ha già cambiato pagina
-        if (!data) { goTo('home'); return; }
+        if (!data) { renderAdminLoginGate(); return; }
         loadAdminData(panel, 'week');
       })
-      .catch(() => { goTo('home'); });
+      .catch(() => { renderAdminLoginGate(); });
   }
 
   function loadAdminData(panel, period) {
@@ -692,7 +706,9 @@
         ${Object.entries(ADMIN_PERIODS).map(([key, p]) =>
           `<button class="pill ${key === period ? 'pill--dark' : 'pill--ghost'}" data-period="${key}">${p.label}</button>`
         ).join('')}
+        ${passkeySupported() ? `<button class="pill pill--ghost" id="adminPasskeySetupBtn">Attiva Face ID <em>→</em></button>` : ''}
       </div>
+      <p class="account__msg" id="adminPasskeyMsg" hidden></p>
       <div class="admin__tiles" id="adminTiles"><p class="account__msg">Carico i dati…</p></div>
       <div class="admin__chart-wrap"><canvas id="adminChart" height="90"></canvas></div>
       <div class="admin__tables" id="adminTables"></div>`;
@@ -969,15 +985,15 @@
     const logout = e.target.closest('#logoutBtn');
     if (logout) { supa.auth.signOut().then(() => { authMode = 'login'; renderAccount(); }); return; }
 
-    // account: attiva Face ID/Touch ID per gli accessi successivi
-    const passkeySetup = e.target.closest('#passkeySetupBtn');
-    if (passkeySetup) { setupPasskey(); return; }
+    // dashboard privata: attiva Face ID/Touch ID per gli accessi successivi
+    const adminPasskeySetup = e.target.closest('#adminPasskeySetupBtn');
+    if (adminPasskeySetup) { setupPasskey('adminPasskeyMsg'); return; }
 
-    // login: sblocca con Face ID/Touch ID invece della password
-    const passkeyLogin = e.target.closest('#passkeyLoginBtn');
-    if (passkeyLogin) {
-      const emailField = document.querySelector('#loginForm input[name="email"]');
-      loginWithPasskey(emailField ? emailField.value.trim() : '');
+    // dashboard privata: sblocca con Face ID/Touch ID invece della password
+    const adminPasskeyLogin = e.target.closest('#adminPasskeyLoginBtn');
+    if (adminPasskeyLogin) {
+      const emailField = document.querySelector('#adminLoginForm input[name="email"]');
+      loginWithPasskey(emailField ? emailField.value.trim() : '', 'adminLoginMsg');
       return;
     }
 
@@ -1080,6 +1096,20 @@
           btn.disabled = false;
           if (error && msg) { msg.hidden = false; msg.textContent = authErrorText(error); }
           // sul successo ci pensa onAuthStateChange a ri-renderizzare il pannello
+        });
+      return;
+    }
+    if (e.target.id === 'adminLoginForm') {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const msg = document.getElementById('adminLoginMsg');
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      supa.auth.signInWithPassword({ email: fd.get('email').trim().toLowerCase(), password: fd.get('password') })
+        .then(({ error }) => {
+          btn.disabled = false;
+          if (error && msg) { msg.hidden = false; msg.textContent = authErrorText(error); }
+          // sul successo ci pensa onAuthStateChange a ri-renderizzare la dashboard
         });
       return;
     }
