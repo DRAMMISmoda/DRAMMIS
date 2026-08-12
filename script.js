@@ -1442,6 +1442,7 @@
   /* ---------- INIT ---------- */
   updateBadges();
   updateHeader();
+  if (['privacy', 'termini'].includes(location.hash.slice(1))) goTo(location.hash.slice(1));
   window.addEventListener('hashchange', () => { if (location.hash === '#admin') goTo('admin'); });
   setTimeout(() => document.querySelectorAll('.view--active .hero .reveal').forEach((el) => el.classList.add('in')), 120);
 
