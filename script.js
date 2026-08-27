@@ -56,11 +56,26 @@
   /* ---------- SHOP STATE (localStorage) ---------- */
   const store = {
     cart: load('dr_cart', []),
+    fav: load('dr_fav', []),
     save() {
       localStorage.setItem('dr_cart', JSON.stringify(this.cart));
     },
+    saveFav() {
+      localStorage.setItem('dr_fav', JSON.stringify(this.fav));
+    },
   };
   function load(k, d) { try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } }
+
+  /* ---------- PREFERITI (localStorage, stesso pattern del carrello — nessun account richiesto) ---------- */
+  function isFav(id) { return store.fav.includes(id); }
+  function toggleFav(id) {
+    const i = store.fav.indexOf(id);
+    if (i === -1) store.fav.push(id); else store.fav.splice(i, 1);
+    store.saveFav();
+    updateBadges();
+    document.querySelectorAll(`[data-fav="${id}"]`).forEach((btn) => btn.classList.toggle('is-active', isFav(id)));
+    return isFav(id);
+  }
 
   /* ---------- ACCOUNT — autenticazione reale via Supabase Auth ---------- */
   const supa = window.supabase.createClient(
@@ -117,9 +132,12 @@
   function updateBadges() {
     const c = document.getElementById('cartCount');
     if (c) { c.textContent = cartQtyTotal(); c.classList.toggle('is-empty', cartQtyTotal() === 0); }
+    const f = document.getElementById('favCount');
+    if (f) { f.textContent = store.fav.length; f.classList.toggle('is-empty', store.fav.length === 0); }
   }
 
   /* ---------- CARD BUILDER (editorial) ---------- */
+  const FAV_HEART_SVG = '<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.7-10-9.3C.5 8 2 4.5 5.5 4c2-.3 3.8.7 6.5 3.3C14.7 4.7 16.5 3.7 18.5 4 22 4.5 23.5 8 22 11.7 19.5 16.3 12 21 12 21z"/></svg>';
   function card(p) {
     const el = document.createElement('article');
     el.className = 'card';
@@ -128,6 +146,7 @@
     el.innerHTML = `
       <div class="card__media">
         ${flag}
+        <button class="card__fav${isFav(p.id) ? ' is-active' : ''}" data-fav="${p.id}" aria-label="Aggiungi ai preferiti">${FAV_HEART_SVG}</button>
         <div class="card__img" role="img" aria-label="${p.name}" style="background-image:url('${IMG(p.img, 1100)}')"></div>
       </div>
       <div class="card__body">
@@ -136,6 +155,17 @@
         <span class="card__price">${p.price}</span>
       </div>`;
     return el;
+  }
+
+  /* ---------- PAGINA PREFERITI ---------- */
+  function renderFavorites() {
+    const grid = document.getElementById('favGrid');
+    const empty = document.getElementById('favEmpty');
+    const items = store.fav.map((id) => ALL[id]).filter(Boolean);
+    grid.innerHTML = '';
+    items.forEach((p) => grid.appendChild(card(p)));
+    empty.hidden = items.length > 0;
+    grid.hidden = items.length === 0;
   }
   /* ---------- BANNER PRODOTTO IN EVIDENZA — largo, nome sotto in striscia nera ---------- */
   function fillFeature(id, p) {
@@ -303,6 +333,7 @@
     else if (view === 'checkout') renderCheckout();
     else if (view === 'account') { if (authMode !== 'recovery') authMode = 'login'; renderAccount(); }
     else if (view === 'admin') renderAdmin();
+    else if (view === 'favorites') renderFavorites();
   }
 
   function switchView(view, prep, opts) {
@@ -393,6 +424,9 @@
       const add = document.getElementById('pdpAdd');
       add.dataset.size = (p.sizes && p.sizes[0]) || 'Unica';
       add.firstChild.textContent = 'Aggiungi al carrello ';
+
+      const favBtn = document.getElementById('pdpFav');
+      if (favBtn) favBtn.classList.toggle('is-active', isFav(p.cartId || p.id));
 
       if (p.duoVariants) {
         document.getElementById('pdpColors').innerHTML = p.duoVariants
@@ -976,6 +1010,21 @@
     // nav links / buttons
     const nav = e.target.closest('[data-nav]');
     if (nav) { e.preventDefault(); closeSearch(); goTo(nav.dataset.nav); return; }
+
+    // cuoricino preferiti — sulla card (non deve aprire la scheda prodotto) o nella scheda prodotto stessa
+    const favBtn = e.target.closest('[data-fav]');
+    if (favBtn) {
+      e.preventDefault(); e.stopPropagation();
+      toggleFav(favBtn.dataset.fav);
+      if (favBtn.closest('[data-view="favorites"]')) renderFavorites(); // rimossa dai preferiti: aggiorna subito la griglia
+      return;
+    }
+    const pdpFav = e.target.closest('#pdpFav');
+    if (pdpFav && currentProduct) {
+      const id = currentProduct.cartId || currentProduct.id;
+      pdpFav.classList.toggle('is-active', toggleFav(id));
+      return;
+    }
 
     // torna indietro (pulsante flottante in alto a sinistra, presente in più schermate)
     const back = e.target.closest('[data-back]');
