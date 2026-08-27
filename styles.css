@@ -706,6 +706,11 @@ body.theme-street .card{transition-duration:.9s}
   .icon-btn svg{width:20px;height:20px}
   .cart-count{top:-2px;right:-2px;min-width:16px;height:16px;font-size:.58rem;border-radius:8px}
 }
+@media(max-width:600px){
+  .icon-btn{width:32px;height:32px}
+  .icon-btn svg{width:15px;height:15px}
+  .cart-count{top:-1px;right:-1px;min-width:14px;height:14px;font-size:.52rem;border-radius:7px}
+}
 @media(max-width:380px){
   .icon-btn{width:27px;height:27px}
   .icon-btn svg{width:13px;height:13px}
@@ -1608,6 +1613,10 @@ body.theme-luxo .tile-col:hover .tile-sq__img{
 @media(max-width:860px){
   .menu-toggle{width:44px;height:44px}
   .menu-toggle span{width:17px}
+}
+@media(max-width:600px){
+  .menu-toggle{width:32px;height:32px}
+  .menu-toggle span{width:13px}
 }
 @media(max-width:380px){
   .menu-toggle{width:27px;height:27px}
