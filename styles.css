@@ -826,10 +826,10 @@ body.theme-street .grid--3{gap:clamp(26px,3vw,48px)}
    =================================================== */
 
 /* logo image + fallback — scuro sullo sfondo avorio, bianco solo sopra le foto scure dell'hero */
-.logo__img{height:120px;width:auto;display:block;filter:brightness(0)}
+.logo__img{height:auto;max-height:100px;width:auto;max-width:min(38vw,480px);display:block;filter:brightness(0)}
 .header.is-dark .logo__img{filter:brightness(0) invert(1)}
-@media(max-width:860px){.logo__img{height:70px}}
-@media(max-width:600px){.logo__img{height:46px}}
+@media(max-width:860px){.logo__img{max-height:64px;max-width:44vw}}
+@media(max-width:600px){.logo__img{max-height:42px;max-width:48vw}}
 
 .cart-count.is-empty{opacity:0}
 
