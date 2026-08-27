@@ -821,9 +821,9 @@ body.theme-street .grid--3{gap:clamp(26px,3vw,48px)}
    =================================================== */
 
 /* logo image + fallback — scuro sullo sfondo avorio, bianco solo sopra le foto scure dell'hero */
-.logo__img{height:52px;width:auto;display:block;filter:brightness(0)}
+.logo__img{height:62px;width:auto;display:block;filter:brightness(0)}
 .header.is-dark .logo__img{filter:brightness(0) invert(1)}
-@media(max-width:860px){.logo__img{height:38px}}
+@media(max-width:860px){.logo__img{height:44px}}
 
 .cart-count.is-empty{opacity:0}
 
@@ -1603,11 +1603,11 @@ body.theme-luxo .tile-col:hover .tile-sq__img{
   transform:translateY(-1px);
   box-shadow:0 10px 22px -8px rgba(20,15,5,.32),inset 0 1px 0 rgba(255,255,255,.4);
 }
-.menu-toggle{width:42px;height:42px;padding:0;justify-content:center;align-items:center}
-.menu-toggle span{width:16px}
+.menu-toggle{width:76px;height:76px;padding:0;justify-content:center;align-items:center}
+.menu-toggle span{width:29px}
 @media(max-width:860px){
-  .menu-toggle{width:30px;height:30px}
-  .menu-toggle span{width:13px}
+  .menu-toggle{width:44px;height:44px}
+  .menu-toggle span{width:17px}
 }
 @media(max-width:380px){
   .menu-toggle{width:27px;height:27px}
