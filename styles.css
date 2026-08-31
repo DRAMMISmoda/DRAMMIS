@@ -1818,17 +1818,21 @@ body.theme-luxo .tile-col:hover .tile-sq__img{
   opacity:.6;
 }
 
-/* ---- stessa cosa per l'icona flottante dell'assistente AI: niente riquadro/vetro ---- */
+/* ---- stessa cosa per l'icona flottante dell'assistente AI: niente riquadro/vetro.
+   Colore adattivo (bianco su sfondi scuri, nero su sfondi chiari) via mix-blend-mode:
+   invece di un colore fisso poco leggibile su certi sfondi, l'icona bianca "differenza"
+   col contenuto sottostante — su sfondo chiaro il risultato è scuro, su sfondo scuro
+   il risultato è chiaro, si adatta da solo mentre si scorre la pagina. ---- */
 .chatbot__fab{
   background:none;
   border:none;
   box-shadow:none;
-  color:var(--fg);
+  color:#fff;
+  mix-blend-mode:difference;
 }
 .chatbot__fab:hover{
   background:none;
   box-shadow:none;
   transform:none;
-  color:var(--fg);
   opacity:.6;
 }
