@@ -1835,3 +1835,23 @@ body.theme-luxo .tile-col:hover .tile-sq__img{
   transform:scale(1.06);
   opacity:1;
 }
+
+/* ============================================================
+   RESTYLE — ASSISTENTE A SCHERMO INTERO
+   ============================================================ */
+#chatbot.is-open .chatbot__fab{display:none}
+.chatbot__panel{
+  top:0;left:0;right:0;bottom:0;
+  width:100%;max-width:none;height:100%;max-height:none;
+  border-radius:0;border:none;
+  background:var(--card);
+  box-shadow:none;
+  transform-origin:center;
+  transform:translateY(18px) scale(.99);
+}
+.chatbot__head{padding:1.1rem clamp(20px,4vw,36px);border-bottom-color:var(--line)}
+.chatbot__messages{padding:clamp(20px,4vw,36px)}
+.chatbot__form{padding:1.1rem clamp(20px,4vw,36px);border-top-color:var(--line)}
+@media(max-width:480px){
+  .chatbot__panel{left:0;right:0;bottom:0;width:100%;height:100%}
+}

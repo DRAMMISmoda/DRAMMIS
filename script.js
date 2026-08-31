@@ -1407,6 +1407,7 @@
 
   /* ---------- ASSISTENTE VIRTUALE (chatbot) ---------- */
   (function chatbot() {
+    const wrap = document.getElementById('chatbot');
     const headerBtn = document.getElementById('assistantBtn');
     const panel = document.getElementById('chatbotPanel');
     const closeBtn = document.getElementById('chatbotClose');
@@ -1448,6 +1449,7 @@
 
     function toggleOpen() {
       const isOpen = panel.classList.toggle('is-open');
+      if (wrap) wrap.classList.toggle('is-open', isOpen);
       panel.setAttribute('aria-hidden', String(!isOpen));
       if (isOpen) { lockBodyScroll(); setTimeout(() => input.focus(), 200); }
       else unlockBodyScroll();
@@ -1455,6 +1457,7 @@
     if (headerBtn) headerBtn.addEventListener('click', toggleOpen);
     closeBtn.addEventListener('click', () => {
       panel.classList.remove('is-open');
+      if (wrap) wrap.classList.remove('is-open');
       panel.setAttribute('aria-hidden', 'true');
       unlockBodyScroll();
     });
