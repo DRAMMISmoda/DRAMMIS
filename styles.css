@@ -1831,6 +1831,7 @@ body.theme-luxo .tile-col:hover .tile-sq__img{
 }
 .chatbot__fab:hover{
   background:#000;
+  color:#fff;
   box-shadow:0 20px 46px -14px rgba(20,15,5,.55);
   transform:scale(1.06);
   opacity:1;
