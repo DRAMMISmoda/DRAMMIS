@@ -1762,3 +1762,40 @@ body.theme-luxo .tile-col:hover .tile-sq__img{
   .chatbot__fab svg{width:21px;height:21px}
   .chatbot__panel{left:12px;right:12px;width:auto;bottom:calc(14px + 50px + 12px);height:min(60vh,460px)}
 }
+
+/* ============================================================
+   RESTYLE — FORME SQUADRATE (via i cerchi/pillole, leggero
+   smussamento agli angoli ovunque). Vince su tutti i blocchi
+   precedenti che usavano border-radius:50%/100%/999% o lo squircle.
+   ============================================================ */
+:root{
+  --squircle:12px;
+  --radius:10px;
+  --radius-sm:4px;
+}
+
+/* pulsanti icona rotondi (header, drawer, preferiti scheda, chat) */
+.icon-btn,.menu-toggle,.drawer__close,.card__fav,.chatbot__fab,.chatbot__form button,.co-done__mark{
+  border-radius:var(--radius);
+}
+.cart-count{border-radius:var(--radius-sm)}
+
+/* pillole (100px/999px) -> badge/bottoni squadrati */
+.pill,.pill--outline::after,.page-back,.pdp__back--float,.qty,.pdp__color,.hero__eyebrow--badge{
+  border-radius:var(--radius);
+}
+.card__tag,.pdp__flag{border-radius:var(--radius-sm)}
+
+/* swatch colore e badge numerico nel riepilogo checkout */
+.pdp__sw,.pdp--v2 .pdp__color,.co-line__img span{border-radius:var(--radius-sm)}
+
+/* pallini di stato (live/scorte) leggermente smussati anziché cerchi pieni */
+.chatbot__dot,.card__stock::before,.drop__live i,.pdp__urgtxt i{border-radius:var(--radius-sm)}
+
+/* immagini "squircle" (prodotto in evidenza, fondatori, gallery PDP) — raggio ridotto,
+   e corner-shape riportato a normale per disattivare l'effetto superellisse/blob
+   sui browser che lo supportano */
+.card__media,.ed__img,.trio__frame,.pdp__gallery .pdp__shot{
+  border-radius:var(--squircle);
+  corner-shape:normal;
+}
