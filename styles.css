@@ -1817,3 +1817,18 @@ body.theme-luxo .tile-col:hover .tile-sq__img{
   transform:none;
   opacity:.6;
 }
+
+/* ---- stessa cosa per l'icona flottante dell'assistente AI: niente riquadro/vetro ---- */
+.chatbot__fab{
+  background:none;
+  border:none;
+  box-shadow:none;
+  color:var(--fg);
+}
+.chatbot__fab:hover{
+  background:none;
+  box-shadow:none;
+  transform:none;
+  color:var(--fg);
+  opacity:.6;
+}
