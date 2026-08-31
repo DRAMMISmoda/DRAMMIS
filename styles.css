@@ -1799,3 +1799,21 @@ body.theme-luxo .tile-col:hover .tile-sq__img{
   border-radius:var(--squircle);
   corner-shape:normal;
 }
+
+/* ============================================================
+   RESTYLE — ICONE HEADER SENZA RIQUADRO (icone nude, niente vetro)
+   ============================================================ */
+.icon-btn,.menu-toggle{
+  background:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+  border:none;
+  box-shadow:none;
+  border-radius:var(--radius-sm);
+}
+.icon-btn:hover,.menu-toggle:hover{
+  background:none;
+  box-shadow:none;
+  transform:none;
+  opacity:.6;
+}
