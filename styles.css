@@ -1866,16 +1866,16 @@ body.theme-luxo .tile-col:hover .tile-sq__img{
 }
 .hero-world-btn{
   padding:.95rem 2.4rem;color:#000;
-  background:rgba(234,226,205,.58);
+  background:rgba(240,235,222,.9);
   backdrop-filter:blur(32px) saturate(160%);-webkit-backdrop-filter:blur(32px) saturate(160%);
   font-family:'Urbanist',sans-serif;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
-  border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,.45);cursor:pointer;
-  box-shadow:0 10px 30px -14px rgba(20,15,5,.35),inset 0 1px 0 rgba(255,255,255,.4);
+  border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,.6);cursor:pointer;
+  box-shadow:0 10px 30px -14px rgba(20,15,5,.35),inset 0 1px 0 rgba(255,255,255,.6);
   transition:transform .35s var(--ease),background .35s var(--ease),box-shadow .35s var(--ease);
 }
 .hero-world-btn:hover{
   transform:translateY(-2px);
-  background:rgba(234,226,205,.74);
+  background:rgba(240,235,222,.97);
   box-shadow:0 14px 34px -14px rgba(20,15,5,.4),inset 0 1px 0 rgba(255,255,255,.45);
 }
 @media(max-width:480px){
