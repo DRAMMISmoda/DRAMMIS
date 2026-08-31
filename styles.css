@@ -1865,12 +1865,19 @@ body.theme-luxo .tile-col:hover .tile-sq__img{
   z-index:2;display:flex;gap:clamp(12px,2vw,20px);flex-wrap:wrap;justify-content:center;
 }
 .hero-world-btn{
-  padding:.95rem 2.4rem;background:#fff;color:#000;
+  padding:.95rem 2.4rem;color:#fff;
+  background:rgba(255,255,255,.14);
+  backdrop-filter:blur(14px) saturate(180%);-webkit-backdrop-filter:blur(14px) saturate(180%);
   font-family:'Urbanist',sans-serif;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
-  border-radius:var(--radius-sm);border:none;cursor:pointer;
-  transition:transform .35s var(--ease),background .35s var(--ease);
+  border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,.3);cursor:pointer;
+  box-shadow:0 6px 18px -8px rgba(20,15,5,.28),inset 0 1px 0 rgba(255,255,255,.35);
+  transition:transform .35s var(--ease),background .35s var(--ease),box-shadow .35s var(--ease);
 }
-.hero-world-btn:hover{transform:translateY(-2px);background:#eee}
+.hero-world-btn:hover{
+  transform:translateY(-2px);
+  background:rgba(255,255,255,.3);
+  box-shadow:0 10px 22px -8px rgba(20,15,5,.32),inset 0 1px 0 rgba(255,255,255,.4);
+}
 @media(max-width:480px){
   .hero__worlds-cta{bottom:clamp(50px,10vh,90px);gap:10px}
   .hero-world-btn{padding:.8rem 1.8rem;font-size:.72rem;letter-spacing:.16em}
