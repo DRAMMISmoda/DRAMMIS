@@ -1865,7 +1865,7 @@ body.theme-luxo .tile-col:hover .tile-sq__img{
   z-index:2;display:flex;gap:clamp(12px,2vw,20px);flex-wrap:wrap;justify-content:center;
 }
 .hero-world-btn{
-  padding:.95rem 2.4rem;color:#211D17;
+  padding:.95rem 2.4rem;color:#000;
   background:rgba(234,226,205,.58);
   backdrop-filter:blur(32px) saturate(160%);-webkit-backdrop-filter:blur(32px) saturate(160%);
   font-family:'Urbanist',sans-serif;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
