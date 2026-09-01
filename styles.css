@@ -516,7 +516,7 @@ body.theme-home .about-band .eyebrow--light,body.theme-neutral .about-band .eyeb
 @media(max-width:380px){
   .icon-btn{width:27px;height:27px}
   .icon-btn svg{width:13px;height:13px}
-  .logo__img{height:28px}
+  .logo__img{height:24px}
 }
 @media(max-width:480px){
   .grid--4,.grid--3{grid-template-columns:1fr}
@@ -832,7 +832,7 @@ body.theme-street .grid--3{gap:clamp(26px,3vw,48px)}
 .logo__img{height:82px;width:auto;display:block;filter:brightness(0)}
 .header.is-dark .logo__img{filter:brightness(0) invert(1)}
 @media(max-width:1400px){.logo__img{height:52px}}
-@media(max-width:600px){.logo__img{height:36px}}
+@media(max-width:600px){.logo__img{height:31px}}
 
 .cart-count.is-empty{opacity:0}
 
