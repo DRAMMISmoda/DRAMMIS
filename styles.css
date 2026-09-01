@@ -1296,12 +1296,24 @@ body.theme-street{
 .pdp__section:last-child{border-bottom:1px solid var(--line)}
 .pdp__h{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;margin-bottom:.9rem}
 .pdp__section p{color:var(--muted);line-height:1.8;max-width:540px;font-weight:300}
+/* Sotto gli 860px lo split resta sinistra/destra (verticale) — colonne più strette, non impilate sopra/sotto */
 @media(max-width:860px){
-  .pdp--v2 .pdp__split{display:block;height:auto}
-  .pdp__mediawrap{height:auto}
-  .pdp--v2 .pdp__main{height:78vh}
-  .pdp--v2 .pdp__pshot{height:78vh}
-  .pdp--v2 .pdp__info-wrap{height:auto;overflow:visible;padding:32px var(--gutter) 0}
+  .pdp--v2 .pdp__info-wrap{padding:118px clamp(14px,4vw,26px) 40px}
+  .pdp--v2 .pdp__name{font-size:clamp(1.3rem,6.5vw,2.1rem)}
+  .pdp--v2 .pdp__price{font-size:1.05rem;margin:.5rem 0 1.3rem}
+  .pdp--v2 .pdp__block{margin-bottom:1rem}
+  .pdp--v2 .pdp__label{font-size:.68rem}
+  .pdp--v2 .pdp__color{width:24px;height:24px}
+  .pdp--v2 .pdp__color .pdp__sw{width:18px;height:18px}
+  .pdp__prevblock{margin-bottom:1.4rem}
+  .pdp__colorprev{width:40px;height:40px}
+  .pdp--v2 .pdp__actions{margin-bottom:1.6rem;gap:.5rem}
+  .pdp--v2 .pdp__add{padding:.8rem .6rem;font-size:.64rem;letter-spacing:.08em;gap:.35rem}
+  .pdp--v2 .pdp__fav{width:38px;height:38px}
+  .pdp--v2 .pdp__fav svg{width:16px;height:16px}
+  .pdp__section{padding:1rem 0}
+  .pdp__h{font-size:.6rem;margin-bottom:.6rem}
+  .pdp__section p{font-size:.82rem;line-height:1.6}
 }
 
 /* ============================================================
