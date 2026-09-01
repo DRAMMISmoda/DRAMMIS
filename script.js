@@ -327,6 +327,7 @@
   // che aveva, così "torna indietro" ripristina esattamente dove si era arrivati.
   let navStack = [];
   let currentProduct = null;
+  let pdpPhotoIndex = 0;
 
   function onEnter(view) {
     if (view === 'cart') renderCart();
@@ -389,11 +390,21 @@
   }
 
   /* ---------- PDP galleria — 5 tonalità di nero come placeholder, da sostituire con le foto reali ---------- */
+  /* Niente scroll nativo del browser: la galleria è ferma e si muove SOLO su/giù tra le foto
+     tramite rotellina/swipe gestiti a mano, per evitare che lo scroll "scappi" lateralmente
+     o sulla pagina quando si è alla prima/ultima foto. */
   const PDP_PLACEHOLDER_SHADES = ['#050505', '#111111', '#1c1c1c', '#282828', '#343434'];
   function renderPdpGallery() {
-    return PDP_PLACEHOLDER_SHADES
+    const shots = PDP_PLACEHOLDER_SHADES
       .map((c, i) => `<div class="pdp__pshot" style="background:${c}" aria-label="Foto prodotto ${i + 1} (segnaposto)"></div>`)
       .join('');
+    return `<div class="pdp__pstrip">${shots}</div>`;
+  }
+  function setPdpPhotoIndex(i) {
+    const strip = document.querySelector('#pdpMain .pdp__pstrip');
+    if (!strip) return;
+    pdpPhotoIndex = Math.max(0, Math.min(PDP_PLACEHOLDER_SHADES.length - 1, i));
+    strip.style.transform = `translateY(${pdpPhotoIndex * -100}vh)`;
   }
 
   function openProduct(p) {
@@ -406,6 +417,7 @@
       main.removeAttribute('role'); main.removeAttribute('aria-label');
       // Galleria — 5 foto scorrevoli verticalmente; per ora tonalità di nero, poi sostituite con le foto vere
       main.innerHTML = renderPdpGallery();
+      pdpPhotoIndex = 0;
 
       // COLONNA DESTRA — info
       document.getElementById('pdpName').textContent = p.name;
@@ -1092,6 +1104,34 @@
     // search overlay backdrop
     if (e.target === search) closeSearch();
   });
+
+  /* ---------- PDP galleria — rotellina/swipe: SOLO su/giù tra le foto, mai orizzontale, mai sulla pagina ---------- */
+  let pdpWheelLocked = false;
+  document.addEventListener('wheel', (e) => {
+    const gallery = e.target.closest('#pdpMain');
+    if (!gallery) return;
+    e.preventDefault();
+    if (pdpWheelLocked || Math.abs(e.deltaY) < 8) return;
+    pdpWheelLocked = true;
+    setPdpPhotoIndex(pdpPhotoIndex + (e.deltaY > 0 ? 1 : -1));
+    setTimeout(() => { pdpWheelLocked = false; }, 550);
+  }, { passive: false });
+
+  let pdpTouchStartY = null;
+  document.addEventListener('touchstart', (e) => {
+    if (e.target.closest('#pdpMain')) pdpTouchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchmove', (e) => {
+    if (pdpTouchStartY !== null && e.target.closest('#pdpMain')) e.preventDefault();
+  }, { passive: false });
+  document.addEventListener('touchend', (e) => {
+    if (pdpTouchStartY === null || !e.target.closest('#pdpMain')) { pdpTouchStartY = null; return; }
+    const endY = e.changedTouches[0].clientY;
+    const delta = pdpTouchStartY - endY;
+    pdpTouchStartY = null;
+    if (Math.abs(delta) < 40) return;
+    setPdpPhotoIndex(pdpPhotoIndex + (delta > 0 ? 1 : -1));
+  }, { passive: true });
 
   /* ---------- CHECKOUT: payment fields + submit ---------- */
   document.addEventListener('change', (e) => {
