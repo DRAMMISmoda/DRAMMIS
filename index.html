@@ -407,49 +407,48 @@
   <!-- ============ PRODUCT DETAIL ============ -->
   <section class="view" data-view="product">
     <div class="pdp pdp--v2">
-      <!-- FOTO PRINCIPALE — schermo intero -->
-      <div class="pdp__mediawrap">
-        <div class="pdp__main" id="pdpMain"></div>
-      </div>
+      <div class="pdp__split">
+        <!-- COLONNA SINISTRA — galleria foto, scorrevole verticalmente -->
+        <div class="pdp__mediawrap">
+          <div class="pdp__main" id="pdpMain"></div>
+        </div>
 
-      <!-- DUE QUADRATI GRANDI ATTACCATI — galleria -->
-      <div class="pdp__thumbs" id="pdpThumbs"></div>
+        <!-- COLONNA DESTRA — informazioni -->
+        <div class="pdp__info-wrap">
+          <div class="pdp__info">
+            <h1 class="pdp__name" id="pdpName"></h1>
+            <div class="pdp__price" id="pdpPrice"></div>
 
-      <!-- INFORMAZIONI — sotto le immagini -->
-      <div class="pdp__info-wrap">
-        <div class="pdp__info">
-          <h1 class="pdp__name" id="pdpName"></h1>
-          <div class="pdp__price" id="pdpPrice"></div>
+            <div class="pdp__block">
+              <span class="pdp__label">Colore — <em id="pdpColorName"></em></span>
+              <div class="pdp__colors" id="pdpColors"></div>
+            </div>
 
-          <div class="pdp__block">
-            <span class="pdp__label">Colore — <em id="pdpColorName"></em></span>
-            <div class="pdp__colors" id="pdpColors"></div>
-          </div>
+            <div class="pdp__block pdp__prevblock">
+              <span class="pdp__label">Anteprima colore</span>
+              <div class="pdp__colorprev" id="pdpColorPrev"></div>
+            </div>
 
-          <div class="pdp__block pdp__prevblock">
-            <span class="pdp__label">Anteprima colore</span>
-            <div class="pdp__colorprev" id="pdpColorPrev"></div>
-          </div>
+            <p class="pdp__stock" id="pdpStock" hidden></p>
+            <div class="pdp__actions">
+              <button class="pill pill--dark pdp__add" id="pdpAdd">Aggiungi al carrello <em>→</em></button>
+              <button class="icon-btn pdp__fav" id="pdpFav" aria-label="Aggiungi ai preferiti">
+                <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.7-10-9.3C.5 8 2 4.5 5.5 4c2-.3 3.8.7 6.5 3.3C14.7 4.7 16.5 3.7 18.5 4 22 4.5 23.5 8 22 11.7 19.5 16.3 12 21 12 21z"/></svg>
+              </button>
+            </div>
 
-          <p class="pdp__stock" id="pdpStock" hidden></p>
-          <div class="pdp__actions">
-            <button class="pill pill--dark pdp__add" id="pdpAdd">Aggiungi al carrello <em>→</em></button>
-            <button class="icon-btn pdp__fav" id="pdpFav" aria-label="Aggiungi ai preferiti">
-              <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.7-10-9.3C.5 8 2 4.5 5.5 4c2-.3 3.8.7 6.5 3.3C14.7 4.7 16.5 3.7 18.5 4 22 4.5 23.5 8 22 11.7 19.5 16.3 12 21 12 21z"/></svg>
-            </button>
-          </div>
-
-          <div class="pdp__section">
-            <h3 class="pdp__h">Descrizione</h3>
-            <p id="pdpDesc"></p>
-          </div>
-          <div class="pdp__section">
-            <h3 class="pdp__h">Materiali</h3>
-            <p id="pdpMaterials"></p>
-          </div>
-          <div class="pdp__section">
-            <h3 class="pdp__h">Consegna e Pagamento</h3>
-            <p>Spedizione standard gratuita in 2–4 giorni lavorativi. Reso gratuito entro 30 giorni con etichetta prepagata. Pagamenti sicuri: carta di credito, PayPal, Apple Pay e Google Pay.</p>
+            <div class="pdp__section">
+              <h3 class="pdp__h">Descrizione</h3>
+              <p id="pdpDesc"></p>
+            </div>
+            <div class="pdp__section">
+              <h3 class="pdp__h">Materiali</h3>
+              <p id="pdpMaterials"></p>
+            </div>
+            <div class="pdp__section">
+              <h3 class="pdp__h">Consegna e Pagamento</h3>
+              <p>Spedizione standard gratuita in 2–4 giorni lavorativi. Reso gratuito entro 30 giorni con etichetta prepagata. Pagamenti sicuri: carta di credito, PayPal, Apple Pay e Google Pay.</p>
+            </div>
           </div>
         </div>
       </div>

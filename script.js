@@ -388,34 +388,26 @@
     if (prev) prev.style.background = swatch(c);
   }
 
+  /* ---------- PDP galleria — 5 tonalità di nero come placeholder, da sostituire con le foto reali ---------- */
+  const PDP_PLACEHOLDER_SHADES = ['#050505', '#111111', '#1c1c1c', '#282828', '#343434'];
+  function renderPdpGallery() {
+    return PDP_PLACEHOLDER_SHADES
+      .map((c, i) => `<div class="pdp__pshot" style="background:${c}" aria-label="Foto prodotto ${i + 1} (segnaposto)"></div>`)
+      .join('');
+  }
+
   function openProduct(p) {
     currentProduct = p;
     logEvent('product_view', { product_id: p.cartId || p.id, product_name: p.name });
     switchView('product', () => {
       const main = document.getElementById('pdpMain');
-      const thumbs = document.getElementById('pdpThumbs');
-      thumbs.innerHTML = '';
 
       main.style.backgroundImage = '';
       main.removeAttribute('role'); main.removeAttribute('aria-label');
-      if (p.duoVariants) {
-        applyLuxoVariant(p, 'duo');
-      } else if (p.pair) {
-        // COLONNA DESTRA — galleria scorrevole nero/bianco
-        main.innerHTML = `
-          <div class="pdp__gallery">
-            <div class="pdp__slide" role="img" aria-label="${p.name} — ${p.colors[0]}" style="background-image:url('${IMG(p.img, 1600)}')"></div>
-            <div class="pdp__slide" role="img" aria-label="${p.name} — ${p.pair.color}" style="background-image:url('${IMG(p.pair.img, 1600)}')"></div>
-          </div>`;
-        main.querySelector('.pdp__gallery').scrollLeft = 0;
-      } else {
-        // COLONNA DESTRA — immagine principale
-        main.innerHTML = '';
-        main.style.backgroundImage = p.img ? `url('${IMG(p.img, 1300)}')` : '';
-        if (p.img) { main.setAttribute('role', 'img'); main.setAttribute('aria-label', p.name); }
-      }
+      // Galleria — 5 foto scorrevoli verticalmente; per ora tonalità di nero, poi sostituite con le foto vere
+      main.innerHTML = renderPdpGallery();
 
-      // COLONNA SINISTRA — info
+      // COLONNA DESTRA — info
       document.getElementById('pdpName').textContent = p.name;
       document.getElementById('pdpDesc').textContent = p.desc;
       const mat = (p.specs.find((s) => /material/i.test(s[0])) || [null, 'Materiali pregiati'])[1];
@@ -431,6 +423,7 @@
       if (p.duoVariants) {
         document.getElementById('pdpColors').innerHTML = p.duoVariants
           .map((v, i) => `<button class="pdp__color pdp__variant${i === 0 ? ' is-active' : ''}" data-variant="${v.key}" aria-label="${v.label}"><span class="pdp__sw" style="background:${v.swatch}"></span></button>`).join('');
+        applyLuxoVariant(p, 'duo');
       } else {
         document.getElementById('pdpPrice').textContent = p.price;
         document.getElementById('pdpColors').innerHTML = p.colors
@@ -454,18 +447,6 @@
   /* ---------- BOX LUNGO LUXO — selezione variante (entrambe / bianco / nero) ---------- */
   function applyLuxoVariant(p, key) {
     const v = p.duoVariants.find((x) => x.key === key) || p.duoVariants[0];
-    const main = document.getElementById('pdpMain');
-    main.style.backgroundImage = '';
-    const label = `${p.name} — ${v.label}`;
-    if (v.key === 'duo') {
-      main.innerHTML = `
-        <div class="pdp__herodup pdp__herodup--desktop" role="img" aria-label="${label}" style="background-image:url('${IMG(p.heroDuo.desktop, 1800)}')"></div>
-        <div class="pdp__herodup pdp__herodup--mobile" role="img" aria-label="${label}" style="background-image:url('${IMG(p.heroDuo.mobile, 1300)}')"></div>`;
-    } else {
-      main.innerHTML = `
-        <div class="pdp__herodup pdp__herodup--desktop" role="img" aria-label="${label}" style="background-image:url('${IMG(v.imgDesktop || v.img, 1800)}')"></div>
-        <div class="pdp__herodup pdp__herodup--mobile" role="img" aria-label="${label}" style="background-image:url('${IMG(v.img, 1300)}')"></div>`;
-    }
     document.getElementById('pdpPrice').textContent = v.price;
     setPdpColor(v.label);
 
@@ -1069,13 +1050,6 @@
       setPdpColor(col.dataset.color);
       return;
     }
-    // PDP thumbnail -> swap main image
-    const thumb = e.target.closest('.pdp__thumb');
-    if (thumb) {
-      document.getElementById('pdpMain').style.backgroundImage = `url('${IMG(thumb.dataset.img, 1300)}')`;
-      return;
-    }
-
     // add to cart (PDP)
     const add = e.target.closest('#pdpAdd');
     if (add) {
