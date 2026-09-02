@@ -1034,7 +1034,7 @@ body.theme-home .header .logo{opacity:0;visibility:hidden;pointer-events:none}
 .hero-logo.is-visible{opacity:1;visibility:visible;pointer-events:auto}
 .hero-logo.is-small{top:44px}
 .hero-logo__img{
-  width:auto;height:auto;max-height:min(30vh,300px);max-width:86vw;filter:brightness(0);display:block;
+  width:auto;height:auto;max-height:min(13vh,120px);max-width:70vw;filter:brightness(0);display:block;
   transition:max-height 1s var(--ease),max-width 1s var(--ease),filter .5s;
 }
 .hero-logo.is-dark .hero-logo__img{filter:brightness(0) invert(1)}
