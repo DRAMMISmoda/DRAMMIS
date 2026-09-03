@@ -220,12 +220,14 @@
         <div class="duo__veil"></div>
         <span class="duo__word">Street</span>
         <span class="duo__caption">Cintura Street — da ${products.street[0].price}</span>
+        <span class="btn-ghost duo__cta">Scopri</span>
       </a>
       <a href="#" class="duo__panel" data-nav="luxo" aria-label="${luxoHero.name}">
         <div class="duo__img" style="background-image:url('${IMG(luxoHero.img, 1800)}')"></div>
         <div class="duo__veil"></div>
         <span class="duo__word">Luxo</span>
         <span class="duo__caption">Cintura Luxo — ${luxoHero.price}</span>
+        <span class="btn-ghost duo__cta">Scopri</span>
       </a>`;
   }
   fillHomeDuo();

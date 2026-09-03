@@ -1424,6 +1424,7 @@ body.theme-street{
 .duo__panel:hover .duo__veil{background:rgba(0,0,0,.26)}
 .duo__word{position:relative;z-index:2;font-family:'Urbanist',sans-serif;font-weight:700;font-size:clamp(2.6rem,6.5vw,5.8rem);letter-spacing:.02em;padding-left:.02em}
 .duo__caption{position:relative;z-index:2;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;opacity:.85}
+.duo__cta{position:relative;z-index:2;margin-top:.6rem}
 
 /* varianti con sfondo mascotte (LUMA / ICHI) — foto a piena copertura, non contenuta */
 .duo__img--cover{background-size:cover;background-position:center 22%}
