@@ -215,13 +215,13 @@
     if (!el) return;
     const luxoHero = products.luxo[0];
     el.innerHTML = `
-      <a href="#" class="duo__panel" data-product="${streetDuo.id}" aria-label="${streetDuo.name}">
+      <a href="#" class="duo__panel" data-nav="street" aria-label="${streetDuo.name}">
         <div class="duo__img" style="background-image:url('${IMG(streetDuo.heroDuo.desktop, 1800)}')"></div>
         <div class="duo__veil"></div>
         <span class="duo__word">Street</span>
         <span class="duo__caption">Cintura Street — da ${products.street[0].price}</span>
       </a>
-      <a href="#" class="duo__panel" data-product="${luxoHero.id}" aria-label="${luxoHero.name}">
+      <a href="#" class="duo__panel" data-nav="luxo" aria-label="${luxoHero.name}">
         <div class="duo__img" style="background-image:url('${IMG(luxoHero.img, 1800)}')"></div>
         <div class="duo__veil"></div>
         <span class="duo__word">Luxo</span>
