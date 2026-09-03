@@ -234,8 +234,12 @@
     // col menu aperto il body è "position:fixed" per bloccare lo scroll: window.scrollY
     // risulterebbe 0 anche se in realtà si era scorso più giù, facendo ringrandire il logo per errore
     const y = document.body.style.position === 'fixed' ? lockedScrollY : window.scrollY;
-    const isDark = heroH > 0 && y < heroH - 90;
-    header.classList.toggle('is-solid', y > 40);
+    // "is-dark" (icone/logo bianchi) deve valere SOLO finché la barra è ancora trasparente
+    // sopra il video/foto scuri dell'hero — appena la barra diventa opaca (is-solid), le
+    // icone devono diventare nere insieme, non restare bianche fino a fine hero.
+    const isSolid = y > 40;
+    const isDark = heroH > 0 && !isSolid;
+    header.classList.toggle('is-solid', isSolid);
     header.classList.toggle('is-dark', isDark);
 
     if (heroLogo) {
