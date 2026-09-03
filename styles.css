@@ -105,7 +105,9 @@ body.theme-street .liquid__grain{opacity:.08;background-image:radial-gradient(rg
 /* ============ HEADER ============ */
 .header{
   position:fixed;top:0;left:0;width:100%;z-index:100;color:var(--fg);
-  transition:background .6s var(--ease-soft), backdrop-filter .6s var(--ease-soft), border-color .6s, color .6s;
+  /* niente transizione su "color": icone e logo devono diventare neri di scatto,
+     non con un dissolvenza in ritardo rispetto alla barra */
+  transition:background .6s var(--ease-soft), backdrop-filter .6s var(--ease-soft), border-color .6s;
   border-bottom:1px solid transparent;
 }
 .header.is-solid{
