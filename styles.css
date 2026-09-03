@@ -1853,8 +1853,9 @@ body.theme-luxo .tile-col:hover .tile-sq__img{
   animation:chatbotDotBlink 4.5s linear infinite;
 }
 @keyframes chatbotDotBlink{
-  0%,88.8%{opacity:1}
-  88.9%,100%{opacity:0}
+  0%,88%{opacity:1}
+  90%,98%{opacity:0}
+  100%{opacity:1}
 }
 
 /* ============================================================
