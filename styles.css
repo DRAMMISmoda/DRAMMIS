@@ -1443,6 +1443,10 @@ body.theme-street{
   .category-duo .duo__panel{flex:none;height:56vh}
 }
 
+/* box prodotto Street/Luxo in home: foto reali a piena copertura (non mascotte ritagliate,
+   niente "contain" con bande nere) */
+#homeDuo .duo__img{background-size:cover;background-color:transparent}
+
 /* ---- FONDATORI ---- */
 .founders{padding:clamp(80px,11vw,170px) 0;text-align:center}
 .founders__title{
