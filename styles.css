@@ -1422,7 +1422,7 @@ body.theme-street{
 .duo__veil{position:absolute;inset:0;background:rgba(0,0,0,.42);transition:background .8s var(--ease)}
 .duo__panel:hover .duo__img{transform:scale(1.06)}
 .duo__panel:hover .duo__veil{background:rgba(0,0,0,.26)}
-.duo__word{position:relative;z-index:2;font-family:'Aldrich',sans-serif;font-weight:400;font-size:clamp(2.2rem,5.6vw,5rem);letter-spacing:.02em;padding-left:.02em}
+.duo__word{position:relative;z-index:2;font-family:'Urbanist',sans-serif;font-weight:700;font-size:clamp(2.6rem,6.5vw,5.8rem);letter-spacing:.02em;padding-left:.02em}
 .duo__caption{position:relative;z-index:2;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;opacity:.85}
 .duo__cta{position:relative;z-index:2;margin-top:.6rem;background:#000;border-color:#fff;color:#fff}
 .duo__panel:hover .duo__cta{background:#000;color:#fff}
