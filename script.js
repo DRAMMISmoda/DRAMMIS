@@ -209,6 +209,27 @@
   fillFeature('streetFeature', streetDuo);
   fillFeature('luxoFeature', products.luxo[1]);
 
+  /* ---------- HOME — box Street/Luxo sotto l'hero, schermo diviso a metà ---------- */
+  function fillHomeDuo() {
+    const el = document.getElementById('homeDuo');
+    if (!el) return;
+    const luxoHero = products.luxo[0];
+    el.innerHTML = `
+      <a href="#" class="duo__panel" data-product="${streetDuo.id}" aria-label="${streetDuo.name}">
+        <div class="duo__img" style="background-image:url('${IMG(streetDuo.heroDuo.desktop, 1800)}')"></div>
+        <div class="duo__veil"></div>
+        <span class="duo__word">Street</span>
+        <span class="duo__caption">Cintura Street — da ${products.street[0].price}</span>
+      </a>
+      <a href="#" class="duo__panel" data-product="${luxoHero.id}" aria-label="${luxoHero.name}">
+        <div class="duo__img" style="background-image:url('${IMG(luxoHero.img, 1800)}')"></div>
+        <div class="duo__veil"></div>
+        <span class="duo__word">Luxo</span>
+        <span class="duo__caption">Cintura Luxo — ${luxoHero.price}</span>
+      </a>`;
+  }
+  fillHomeDuo();
+
   /* ---------- FOOTER INJECTION ---------- */
   const footerTpl = document.getElementById('footerTpl');
   document.querySelectorAll('[data-footer]').forEach((slot) =>
