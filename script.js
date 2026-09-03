@@ -209,26 +209,6 @@
   fillFeature('streetFeature', streetDuo);
   fillFeature('luxoFeature', products.luxo[1]);
 
-  /* ---------- SCRITTA "STREET"/"LUXO" — lettere disegnate a mano stile font custom di Manuel
-     (angoli esterni arrotondati, tratto spesso) ricostruite come SVG, non essendo disponibile
-     il file del font originale. Copre solo le lettere che servono per queste due parole. ---------- */
-  const GLYPH_D = {
-    S: 'M58,24 C58,10 45,2 30,2 C14,2 2,10 2,26 C2,40 18,42 34,48 C50,54 68,58 68,76 C68,92 54,98 38,98 C22,98 8,92 8,76',
-    T: 'M4,6 L66,6 M35,6 L35,98',
-    R: 'M8,98 L8,4 L26,4 C42,4 48,12 48,28 C48,44 30,48 8,48 M26,47 L64,98',
-    E: 'M8,4 L8,98 M8,4 L60,4 M8,50 L50,50 M8,98 L60,98',
-    U: 'M8,4 L8,70 C8,92 24,98 36,98 C48,98 64,92 64,70 L64,4',
-    X: 'M6,4 L64,98 M64,4 L6,98',
-    O: 'M35,2 C55,2 68,22 68,50 C68,78 55,98 35,98 C15,98 2,78 2,50 C2,22 15,2 35,2 Z',
-    L: 'M8,4 L8,90 L62,90',
-  };
-  function wordmarkSvg(word) {
-    const cell = 80, glyphW = 70;
-    const vbW = (word.length - 1) * cell + glyphW;
-    const glyphs = word.split('').map((ch, i) => `<path d="${GLYPH_D[ch]}" transform="translate(${i * cell},0)"/>`).join('');
-    return `<svg class="duo__wordmark" viewBox="0 0 ${vbW} 100" aria-hidden="true">${glyphs}</svg>`;
-  }
-
   /* ---------- HOME — box Street/Luxo sotto l'hero, schermo diviso a metà ---------- */
   function fillHomeDuo() {
     const el = document.getElementById('homeDuo');
@@ -238,14 +218,14 @@
       <a href="#" class="duo__panel" data-nav="street" aria-label="${streetDuo.name}">
         <div class="duo__img" style="background-image:url('${IMG(streetDuo.heroDuo.desktop, 1800)}')"></div>
         <div class="duo__veil"></div>
-        ${wordmarkSvg('STREET')}
+        <span class="duo__word">Street</span>
         <span class="duo__caption">Cintura Street — da ${products.street[0].price}</span>
         <span class="btn-ghost duo__cta">Scopri</span>
       </a>
       <a href="#" class="duo__panel" data-nav="luxo" aria-label="${luxoHero.name}">
         <div class="duo__img" style="background-image:url('${IMG(luxoHero.img, 1800)}')"></div>
         <div class="duo__veil"></div>
-        ${wordmarkSvg('LUXO')}
+        <span class="duo__word">Luxo</span>
         <span class="duo__caption">Cintura Luxo — ${luxoHero.price}</span>
         <span class="btn-ghost duo__cta">Scopri</span>
       </a>`;
