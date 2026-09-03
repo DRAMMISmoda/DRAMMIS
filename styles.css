@@ -1803,7 +1803,7 @@ body.theme-luxo .tile-col:hover .tile-sq__img{
 .pdp__sw,.pdp--v2 .pdp__color,.co-line__img span{border-radius:var(--radius-sm)}
 
 /* pallini di stato (live/scorte) leggermente smussati anziché cerchi pieni */
-.chatbot__dot,.card__stock::before,.drop__live i,.pdp__urgtxt i{border-radius:var(--radius-sm)}
+.chatbot__dot,.card__stock::before,.drop__live i,.pdp__urgtxt i,.chatbot__fab-dot{border-radius:var(--radius-sm)}
 
 /* immagini "squircle" (prodotto in evidenza, fondatori, gallery PDP) — raggio ridotto,
    e corner-shape riportato a normale per disattivare l'effetto superellisse/blob
@@ -1845,6 +1845,16 @@ body.theme-luxo .tile-col:hover .tile-sq__img{
   box-shadow:0 20px 46px -14px rgba(20,15,5,.55);
   transform:scale(1.06);
   opacity:1;
+}
+/* pallino verde lampeggiante: acceso 4s, spento mezzo secondo, in loop */
+.chatbot__fab-dot{
+  position:absolute;top:-2px;right:-2px;width:11px;height:11px;
+  background:#4CAF6D;border:2px solid var(--bg);
+  animation:chatbotDotBlink 4.5s linear infinite;
+}
+@keyframes chatbotDotBlink{
+  0%,88.8%{opacity:1}
+  88.9%,100%{opacity:0}
 }
 
 /* ============================================================
