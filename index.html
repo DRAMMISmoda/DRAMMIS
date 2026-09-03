@@ -770,11 +770,6 @@
 <!-- ===== FOOTER TEMPLATE (minimal editoriale) ===== -->
 <template id="footerTpl">
   <footer class="footer footer--min">
-    <a href="#" class="footer__logo footer__logo--xl" data-nav="home">
-      <img src="assets/logo.png" alt="DRAMMIS" class="footer__logo-img"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'" />
-      <span class="logo__mark" style="display:none">DRAMMIS</span>
-    </a>
     <nav class="footer__links">
       <a href="#" data-nav="street">Street</a>
       <a href="#" data-nav="luxo">Luxo</a>
@@ -795,6 +790,11 @@
       <a href="#" data-nav="cookie-policy">Cookie Policy</a>
     </nav>
     <div class="footer__copy">© 2026 DRAMMIS</div>
+    <a href="#" class="footer__logo footer__logo--xl footer__logo--bottom" data-nav="home">
+      <img src="assets/logo.png" alt="DRAMMIS" class="footer__logo-img footer__logo-img--bottom"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'" />
+      <span class="logo__mark" style="display:none">DRAMMIS</span>
+    </a>
   </footer>
 </template>
 

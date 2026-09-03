@@ -1538,6 +1538,8 @@ body.theme-street{
 .footer--min .footer__logo .logo__mark{font-size:1.3rem;letter-spacing:.14em;padding-left:.14em}
 .footer__logo--xl .logo__mark{font-size:clamp(1.9rem,5.4vw,3.6rem);letter-spacing:.1em;padding-left:.1em}
 .footer__logo-img{height:clamp(48px,7vw,96px);width:auto;display:block;filter:brightness(0)}
+.footer__logo--bottom{margin-top:clamp(16px,3vw,32px)}
+.footer__logo-img--bottom{height:clamp(70px,12vw,180px)}
 .footer__news2{display:flex;align-items:center;border-bottom:1px solid rgba(33,29,23,.25);padding-bottom:.6rem;width:min(360px,82vw)}
 .footer__news2 input{flex:1;background:none;border:none;color:#211D17;outline:none;font-family:inherit;font-size:.86rem;letter-spacing:.08em;text-align:center}
 .footer__news2 input::placeholder{color:#8a8272;letter-spacing:.14em;text-transform:uppercase;font-size:.72rem}
