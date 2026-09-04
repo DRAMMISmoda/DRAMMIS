@@ -1,7 +1,7 @@
 {
   "name": "DRAMMIS",
   "short_name": "DRAMMIS",
-  "start_url": "./#admin",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#FAFAF5",

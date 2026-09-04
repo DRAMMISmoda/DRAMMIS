@@ -108,8 +108,6 @@
     if (event === 'PASSWORD_RECOVERY') { authMode = 'recovery'; goTo('account'); }
     const activeView = document.querySelector('.view--active') && document.querySelector('.view--active').dataset.view;
     if (activeView === 'account') renderAccount();
-    if (activeView === 'admin') renderAdmin();
-    if (event === 'INITIAL_SESSION' && location.hash === '#admin') goTo('admin');
   });
 
   const priceNum = (s) => parseInt(String(s).replace(/[^\d]/g, ''), 10) || 0;
@@ -360,7 +358,6 @@
     if (view === 'cart') renderCart();
     else if (view === 'checkout') renderCheckout();
     else if (view === 'account') { if (authMode !== 'recovery') authMode = 'login'; renderAccount(); }
-    else if (view === 'admin') renderAdmin();
     else if (view === 'favorites') renderFavorites();
   }
 
@@ -504,110 +501,6 @@
     }
   }
 
-  /* ---------- FACE ID / TOUCH ID (WebAuthn) ---------- */
-  function passkeySupported() {
-    return typeof window !== 'undefined' && !!window.PublicKeyCredential && !!navigator.credentials;
-  }
-  function bufToB64url(buf) {
-    const bytes = new Uint8Array(buf);
-    let bin = '';
-    bytes.forEach((b) => (bin += String.fromCharCode(b)));
-    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  }
-  function b64urlToBuf(b64url) {
-    const pad = '='.repeat((4 - (b64url.length % 4)) % 4);
-    const b64 = (b64url + pad).replace(/-/g, '+').replace(/_/g, '/');
-    const bin = atob(b64);
-    const bytes = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-    return bytes.buffer;
-  }
-  function preparePublicKeyCreationOptions(options) {
-    return Object.assign({}, options, {
-      challenge: b64urlToBuf(options.challenge),
-      user: Object.assign({}, options.user, { id: b64urlToBuf(options.user.id) }),
-      excludeCredentials: (options.excludeCredentials || []).map((c) => Object.assign({}, c, { id: b64urlToBuf(c.id) })),
-    });
-  }
-  function preparePublicKeyRequestOptions(options) {
-    return Object.assign({}, options, {
-      challenge: b64urlToBuf(options.challenge),
-      allowCredentials: (options.allowCredentials || []).map((c) => Object.assign({}, c, { id: b64urlToBuf(c.id) })),
-    });
-  }
-  function credentialCreateToJSON(cred) {
-    return {
-      id: cred.id,
-      rawId: bufToB64url(cred.rawId),
-      type: cred.type,
-      response: {
-        clientDataJSON: bufToB64url(cred.response.clientDataJSON),
-        attestationObject: bufToB64url(cred.response.attestationObject),
-      },
-      clientExtensionResults: cred.getClientExtensionResults ? cred.getClientExtensionResults() : {},
-    };
-  }
-  function credentialGetToJSON(cred) {
-    return {
-      id: cred.id,
-      rawId: bufToB64url(cred.rawId),
-      type: cred.type,
-      response: {
-        clientDataJSON: bufToB64url(cred.response.clientDataJSON),
-        authenticatorData: bufToB64url(cred.response.authenticatorData),
-        signature: bufToB64url(cred.response.signature),
-        userHandle: cred.response.userHandle ? bufToB64url(cred.response.userHandle) : undefined,
-      },
-      clientExtensionResults: cred.getClientExtensionResults ? cred.getClientExtensionResults() : {},
-    };
-  }
-
-  async function setupPasskey(msgId) {
-    const msg = document.getElementById(msgId || 'passkeyMsg');
-    const show = (t) => { if (msg) { msg.hidden = false; msg.textContent = t; } };
-    try {
-      show('Preparazione…');
-      const optRes = await supa.functions.invoke('webauthn-register', { body: { action: 'options' } });
-      if (optRes.error || !optRes.data) throw optRes.error || new Error('no options');
-      const publicKey = preparePublicKeyCreationOptions(optRes.data);
-      const cred = await navigator.credentials.create({ publicKey });
-      if (!cred) throw new Error('cancelled');
-      const verifyRes = await supa.functions.invoke('webauthn-register', {
-        body: { action: 'verify', credential: credentialCreateToJSON(cred) },
-      });
-      if (verifyRes.error || !verifyRes.data || !verifyRes.data.verified) throw new Error('verifica fallita');
-      show('Face ID/Touch ID attivato — la prossima volta potrai accedere senza password.');
-    } catch (e) {
-      show('Non è stato possibile attivare Face ID su questo dispositivo. Riprova o continua con la password.');
-    }
-  }
-
-  async function loginWithPasskey(email, msgId) {
-    const msg = document.getElementById(msgId || 'loginMsg');
-    const show = (t) => { if (msg) { msg.hidden = false; msg.textContent = t; } };
-    if (!email) { show('Scrivi prima la tua email qui sopra.'); return; }
-    try {
-      show('Verifica in corso…');
-      const optRes = await supa.functions.invoke('webauthn-auth', { body: { action: 'options', email } });
-      if (optRes.error || !optRes.data || optRes.data.error) { show('Nessun accesso rapido configurato per questa email — usa la password.'); return; }
-      const publicKey = preparePublicKeyRequestOptions(optRes.data);
-      const cred = await navigator.credentials.get({ publicKey });
-      if (!cred) throw new Error('cancelled');
-      const verifyRes = await supa.functions.invoke('webauthn-auth', {
-        body: { action: 'verify', email, credential: credentialGetToJSON(cred) },
-      });
-      if (verifyRes.error || !verifyRes.data || !verifyRes.data.verified || !verifyRes.data.token_hash) {
-        show('Verifica non riuscita — usa la password.');
-        return;
-      }
-      const { error: otpErr } = await supa.auth.verifyOtp({ email, token_hash: verifyRes.data.token_hash, type: 'magiclink' });
-      if (otpErr) { show('Non sono riuscito ad aprire la sessione — usa la password.'); return; }
-      // onAuthStateChange ri-renderizza account/dashboard da solo
-    } catch (e) {
-      show('Accesso con Face ID non riuscito — usa la password.');
-    }
-  }
-
   /* ---------- ACCOUNT RENDERER ---------- */
   function renderAccount() {
     const panel = document.getElementById('accountPanel');
@@ -710,185 +603,6 @@
             ).join('')}</div>
           </div>`).join('');
       });
-  }
-
-  /* ---------- DASHBOARD PRIVATA (solo admin) ---------- */
-  const ADMIN_PERIODS = {
-    day: { label: 'Oggi', days: 1 },
-    week: { label: 'Settimana', days: 7 },
-    month: { label: 'Mese', days: 30 },
-    year: { label: 'Anno', days: 365 },
-  };
-  let adminChart = null;
-
-  function renderAdminLoginGate() {
-    const panel = document.getElementById('adminPanel');
-    if (!panel) return;
-    panel.innerHTML = `
-      <div class="account__panel" style="max-width:420px;margin:0 auto">
-        <h3>Area riservata</h3>
-        <form class="account-form" id="adminLoginForm" novalidate>
-          <label>Email<input type="email" name="email" required></label>
-          <label>Password<input type="password" name="password" required></label>
-          <button class="pill pill--dark" type="submit">Accedi <em>→</em></button>
-        </form>
-        ${passkeySupported() ? `<button class="pill pill--ghost" id="adminPasskeyLoginBtn" style="margin-top:.8rem">Sblocca con Face ID <em>→</em></button>` : ''}
-        <p class="account__msg" id="adminLoginMsg" hidden></p>
-      </div>`;
-  }
-
-  function renderAdmin() {
-    const panel = document.getElementById('adminPanel');
-    if (!panel) return;
-    const user = currentUser();
-    if (!user) { renderAdminLoginGate(); return; }
-    panel.innerHTML = `<p class="account__msg">Verifica accesso…</p>`;
-    supa.from('admins').select('user_id').eq('user_id', user.id).maybeSingle()
-      .then(({ data }) => {
-        if (!panel.isConnected) return; // l'utente ha già cambiato pagina
-        if (!data) { renderAdminLoginGate(); return; }
-        loadAdminData(panel, 'week');
-      })
-      .catch(() => { renderAdminLoginGate(); });
-  }
-
-  function loadAdminData(panel, period) {
-    const cutoff = new Date(Date.now() - ADMIN_PERIODS[period].days * 86400000).toISOString();
-
-    panel.innerHTML = `
-      <div class="admin__periods">
-        ${Object.entries(ADMIN_PERIODS).map(([key, p]) =>
-          `<button class="pill ${key === period ? 'pill--dark' : 'pill--ghost'}" data-period="${key}">${p.label}</button>`
-        ).join('')}
-        ${passkeySupported() ? `<button class="pill pill--ghost" id="adminPasskeySetupBtn">Attiva Face ID <em>→</em></button>` : ''}
-      </div>
-      <p class="account__msg" id="adminPasskeyMsg" hidden></p>
-      <div class="admin__tiles" id="adminTiles"><p class="account__msg">Carico i dati…</p></div>
-      <div class="admin__chart-wrap"><canvas id="adminChart" height="90"></canvas></div>
-      <div class="admin__tables" id="adminTables"></div>`;
-
-    panel.querySelectorAll('[data-period]').forEach((btn) => {
-      btn.addEventListener('click', () => loadAdminData(panel, btn.dataset.period));
-    });
-
-    Promise.all([
-      supa.from('orders')
-        .select('id, email, total, created_at, status, order_items(name, qty)')
-        .gte('created_at', cutoff)
-        .order('created_at', { ascending: false }),
-      supa.from('returns').select('status'),
-      supa.from('events').select('type, page, product_name').gte('created_at', cutoff),
-    ]).then(([ordersRes, returnsRes, eventsRes]) => {
-      if (!panel.isConnected) return;
-      if (ordersRes.error || returnsRes.error || eventsRes.error) throw new Error('admin data error');
-      const orders = ordersRes.data || [];
-      const returns = returnsRes.data || [];
-      const events = eventsRes.data || [];
-      renderAdminTiles(orders, returns, events);
-      renderAdminChart(orders, period);
-      renderAdminTables(orders, returns, events);
-    }).catch(() => {
-      const tiles = document.getElementById('adminTiles');
-      if (tiles) tiles.innerHTML = `<p class="account__msg">Non riesco a caricare i dati. Riprova tra poco.</p>`;
-    });
-  }
-
-  function renderAdminTiles(orders, returns, events) {
-    const el = document.getElementById('adminTiles');
-    if (!el) return;
-    const revenue = orders.reduce((s, o) => s + (o.total || 0), 0);
-    const avgOrder = orders.length ? Math.round(revenue / orders.length) : 0;
-    const openReturns = returns.filter((r) => r.status === 'richiesto').length;
-    const visits = events.filter((e) => e.type === 'page_view').length;
-    const productViews = events.filter((e) => e.type === 'product_view').length;
-    const tiles = [
-      ['Fatturato', euro(revenue)],
-      ['Ordini', orders.length],
-      ['Valore medio ordine', euro(avgOrder)],
-      ['Resi aperti', openReturns],
-      ['Visite', visits],
-      ['Prodotti visti', productViews],
-    ];
-    el.innerHTML = tiles.map(([label, value]) => `
-      <div class="admin__tile"><span class="admin__tile-label">${label}</span><span class="admin__tile-value">${value}</span></div>
-    `).join('');
-  }
-
-  function renderAdminChart(orders, period) {
-    const canvas = document.getElementById('adminChart');
-    if (!canvas || !window.Chart) return;
-    const byDay = {};
-    orders.forEach((o) => {
-      const day = new Date(o.created_at).toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' });
-      byDay[day] = (byDay[day] || 0) + 1;
-    });
-    const labels = Object.keys(byDay);
-    const data = Object.values(byDay);
-    if (adminChart) { adminChart.destroy(); adminChart = null; }
-    adminChart = new Chart(canvas.getContext('2d'), {
-      type: 'bar',
-      data: { labels, datasets: [{ label: 'Ordini', data, backgroundColor: '#141414' }] },
-      options: {
-        responsive: true,
-        plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
-      },
-    });
-  }
-
-  function renderAdminTables(orders, returns, events) {
-    const el = document.getElementById('adminTables');
-    if (!el) return;
-
-    const recentOrders = orders.slice(0, 20).map((o) => `
-      <tr><td>${new Date(o.created_at).toLocaleDateString('it-IT')}</td><td>${o.email || '—'}</td><td>${euro(o.total)}</td><td>${o.status || '—'}</td></tr>
-    `).join('') || '<tr><td colspan="4">Nessun ordine nel periodo</td></tr>';
-
-    const productTotals = {};
-    orders.forEach((o) => (o.order_items || []).forEach((it) => {
-      productTotals[it.name] = (productTotals[it.name] || 0) + it.qty;
-    }));
-    const topProducts = Object.entries(productTotals).sort((a, b) => b[1] - a[1]).slice(0, 8)
-      .map(([name, qty]) => `<tr><td>${name}</td><td>${qty}</td></tr>`).join('')
-      || '<tr><td colspan="2">Nessun dato nel periodo</td></tr>';
-
-    const returnStatus = {};
-    returns.forEach((r) => (returnStatus[r.status] = (returnStatus[r.status] || 0) + 1));
-    const returnsByStatus = Object.entries(returnStatus).map(([status, n]) => `<tr><td>${status}</td><td>${n}</td></tr>`).join('')
-      || '<tr><td colspan="2">Nessun reso</td></tr>';
-
-    const pageCounts = {};
-    const productClickCounts = {};
-    events.forEach((e) => {
-      if (e.type === 'page_view' && e.page) pageCounts[e.page] = (pageCounts[e.page] || 0) + 1;
-      if (e.type === 'product_view' && e.product_name) productClickCounts[e.product_name] = (productClickCounts[e.product_name] || 0) + 1;
-    });
-    const topPages = Object.entries(pageCounts).sort((a, b) => b[1] - a[1]).slice(0, 8)
-      .map(([page, n]) => `<tr><td>${page}</td><td>${n}</td></tr>`).join('') || '<tr><td colspan="2">Nessun dato</td></tr>';
-    const topProductClicks = Object.entries(productClickCounts).sort((a, b) => b[1] - a[1]).slice(0, 8)
-      .map(([name, n]) => `<tr><td>${name}</td><td>${n}</td></tr>`).join('') || '<tr><td colspan="2">Nessun dato</td></tr>';
-
-    el.innerHTML = `
-      <div class="admin__table-card">
-        <h3>Ordini recenti</h3>
-        <table class="admin__table"><thead><tr><th>Data</th><th>Cliente</th><th>Totale</th><th>Stato</th></tr></thead><tbody>${recentOrders}</tbody></table>
-      </div>
-      <div class="admin__table-card">
-        <h3>Prodotti più venduti</h3>
-        <table class="admin__table"><thead><tr><th>Prodotto</th><th>Unità</th></tr></thead><tbody>${topProducts}</tbody></table>
-      </div>
-      <div class="admin__table-card">
-        <h3>Resi per stato</h3>
-        <table class="admin__table"><thead><tr><th>Stato</th><th>Conteggio</th></tr></thead><tbody>${returnsByStatus}</tbody></table>
-      </div>
-      <div class="admin__table-card">
-        <h3>Pagine più viste</h3>
-        <table class="admin__table"><thead><tr><th>Pagina</th><th>Visite</th></tr></thead><tbody>${topPages}</tbody></table>
-      </div>
-      <div class="admin__table-card">
-        <h3>Prodotti più cliccati</h3>
-        <table class="admin__table"><thead><tr><th>Prodotto</th><th>Click</th></tr></thead><tbody>${topProductClicks}</tbody></table>
-      </div>`;
   }
 
   /* ---------- CART / CHECKOUT RENDERERS ---------- */
@@ -1054,18 +768,6 @@
     const logout = e.target.closest('#logoutBtn');
     if (logout) { supa.auth.signOut().then(() => { authMode = 'login'; renderAccount(); }); return; }
 
-    // dashboard privata: attiva Face ID/Touch ID per gli accessi successivi
-    const adminPasskeySetup = e.target.closest('#adminPasskeySetupBtn');
-    if (adminPasskeySetup) { setupPasskey('adminPasskeyMsg'); return; }
-
-    // dashboard privata: sblocca con Face ID/Touch ID invece della password
-    const adminPasskeyLogin = e.target.closest('#adminPasskeyLoginBtn');
-    if (adminPasskeyLogin) {
-      const emailField = document.querySelector('#adminLoginForm input[name="email"]');
-      loginWithPasskey(emailField ? emailField.value.trim() : '', 'adminLoginMsg');
-      return;
-    }
-
     // account: passa alla schermata "password dimenticata" / torna al login
     const forgotLink = e.target.closest('#forgotLink');
     if (forgotLink) { e.preventDefault(); authMode = 'forgot'; renderAccount(); return; }
@@ -1186,20 +888,6 @@
           btn.disabled = false;
           if (error && msg) { msg.hidden = false; msg.textContent = authErrorText(error); }
           // sul successo ci pensa onAuthStateChange a ri-renderizzare il pannello
-        });
-      return;
-    }
-    if (e.target.id === 'adminLoginForm') {
-      e.preventDefault();
-      const fd = new FormData(e.target);
-      const msg = document.getElementById('adminLoginMsg');
-      const btn = e.target.querySelector('button[type="submit"]');
-      btn.disabled = true;
-      supa.auth.signInWithPassword({ email: fd.get('email').trim().toLowerCase(), password: fd.get('password') })
-        .then(({ error }) => {
-          btn.disabled = false;
-          if (error && msg) { msg.hidden = false; msg.textContent = authErrorText(error); }
-          // sul successo ci pensa onAuthStateChange a ri-renderizzare la dashboard
         });
       return;
     }
@@ -1536,7 +1224,6 @@
   updateBadges();
   updateHeader();
   if (['privacy', 'termini'].includes(location.hash.slice(1))) goTo(location.hash.slice(1));
-  window.addEventListener('hashchange', () => { if (location.hash === '#admin') goTo('admin'); });
   setTimeout(() => document.querySelectorAll('.view--active .hero .reveal').forEach((el) => el.classList.add('in')), 120);
 
   /* ---------- HERO LOGO — dissolvenza d'ingresso al primo caricamento ---------- */
