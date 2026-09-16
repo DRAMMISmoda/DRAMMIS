@@ -94,6 +94,7 @@
   let authMode = 'login'; // 'login' | 'register' | 'forgot' | 'recovery'
   let registerStep = 1; // 1 = solo email, 2 = nome/cognome/password
   let pendingRegisterEmail = '';
+  let justConfirmedSignup = false; // true appena tornati dal link "conferma email" — mostra "Benvenuto" invece di "Bentornato", una sola volta
   const escAttr = (s) => String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
   const AUTH_ERRORS = {
     'Invalid login credentials': 'Email o password non corrette.',
@@ -110,6 +111,7 @@
   supa.auth.onAuthStateChange((event, sess) => {
     authSession = sess;
     if (event === 'PASSWORD_RECOVERY') { authMode = 'recovery'; goTo('account'); }
+    if (event === 'SIGNED_IN' && justConfirmedSignup) { goTo('account'); return; }
     const activeView = document.querySelector('.view--active') && document.querySelector('.view--active').dataset.view;
     if (activeView === 'account') renderAccount();
   });
@@ -534,10 +536,12 @@
     const user = currentUser();
 
     if (user) {
+      const heading = justConfirmedSignup ? 'Benvenuto' : 'Bentornato';
+      justConfirmedSignup = false; // mostrato una sola volta
       panel.innerHTML = `
         <div class="acc-wrap">
           <div class="acc-block">
-            <h2 class="acc-h">Bentornato, ${user.firstname}</h2>
+            <h2 class="acc-h">${heading}, ${user.firstname}</h2>
             <p class="acc-lead">Hai effettuato l'accesso come <strong>${user.email}</strong>.</p>
             <button class="pill pill--ghost acc-cta" id="logoutBtn">Esci <em>→</em></button>
           </div>
@@ -1013,7 +1017,10 @@
       supa.auth.signUp({
         email: fd.get('email').trim().toLowerCase(),
         password: fd.get('password'),
-        options: { data: { firstname: fd.get('firstname').trim(), lastname: fd.get('lastname').trim() } },
+        options: {
+          data: { firstname: fd.get('firstname').trim(), lastname: fd.get('lastname').trim() },
+          emailRedirectTo: window.location.origin + window.location.pathname + '?welcome=1',
+        },
       }).then(({ data, error }) => {
         btn.disabled = false;
         if (error) { if (msg) { msg.hidden = false; msg.textContent = authErrorText(error); } return; }
@@ -1336,6 +1343,10 @@
   /* ---------- INIT ---------- */
   updateBadges();
   updateHeader();
+  if (new URLSearchParams(location.search).get('welcome') === '1') {
+    justConfirmedSignup = true;
+    history.replaceState(null, '', location.pathname + location.hash); // toglie ?welcome=1 dall'URL ma lascia intatto l'hash con i token di Supabase
+  }
   if (['privacy', 'termini'].includes(location.hash.slice(1))) goTo(location.hash.slice(1));
   setTimeout(() => document.querySelectorAll('.view--active .hero .reveal').forEach((el) => el.classList.add('in')), 120);
 
