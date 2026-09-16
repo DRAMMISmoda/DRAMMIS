@@ -2,8 +2,9 @@
   DRAMMIS — template email "Confirm signup"
   Va incollato in: Supabase Dashboard → Authentication → Emails → Confirm signup → Message body (HTML)
   Variabile usata da Supabase: {{ .ConfirmationURL }}
-  Include meta color-scheme + bgcolor su ogni cella per impedire a Gmail (tema scuro)
-  di invertire automaticamente i colori del design.
+  Gmail app forza il dark mode anche col solo meta color-scheme — la vera difesa è
+  dichiarare esplicitamente una regola @media (prefers-color-scheme: dark) che
+  ripete GLI STESSI colori con !important, così Gmail non applica la sua inversione automatica.
 -->
 <!doctype html>
 <html lang="it">
@@ -13,31 +14,44 @@
 <meta name="color-scheme" content="light">
 <meta name="supported-color-schemes" content="light">
 <title>DRAMMIS</title>
+<style>
+  @media (prefers-color-scheme: dark) {
+    .drm-bodybg { background:#FAFAF5 !important; }
+    .drm-card { background:#FFFFFF !important; }
+    .drm-band { background-color:#0C0B08 !important; }
+    .drm-white-section { background-color:#FFFFFF !important; }
+    .drm-heading { color:#0C0B08 !important; }
+    .drm-text { color:#57534a !important; }
+    .drm-muted { color:#9a9585 !important; }
+    .drm-btn-cell { background-color:#0C0B08 !important; }
+    .drm-btn-link { color:#FAFAF5 !important; }
+  }
+</style>
 </head>
-<body style="margin:0;padding:0;background:#FAFAF5;" bgcolor="#FAFAF5">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#FAFAF5" style="background:#FAFAF5;padding:40px 16px;">
+<body class="drm-bodybg" style="margin:0;padding:0;background:#FAFAF5;" bgcolor="#FAFAF5">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#FAFAF5" class="drm-bodybg" style="background:#FAFAF5;padding:40px 16px;">
   <tr>
     <td align="center">
-      <table role="presentation" width="480" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" style="max-width:480px;width:100%;background:#FFFFFF;border-radius:12px;overflow:hidden;">
+      <table role="presentation" width="480" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="drm-card" style="max-width:480px;width:100%;background:#FFFFFF;border-radius:12px;overflow:hidden;">
         <tr>
-          <td bgcolor="#0C0B08" style="background-color:#0C0B08;padding:48px 40px;text-align:center;">
+          <td bgcolor="#0C0B08" class="drm-band" style="background-color:#0C0B08;padding:48px 40px;text-align:center;">
             <img src="https://drammis.vercel.app/assets/logo-white.png" width="200" alt="DRAMMIS" style="display:block;margin:0 auto;height:auto;max-width:200px;">
           </td>
         </tr>
         <tr>
-          <td bgcolor="#FFFFFF" style="background-color:#FFFFFF;padding:44px 40px 8px;text-align:center;">
-            <h1 style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:21px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#0C0B08;">Conferma il tuo account</h1>
-            <p style="margin:0 0 32px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#57534a;">
+          <td bgcolor="#FFFFFF" class="drm-white-section" style="background-color:#FFFFFF;padding:44px 40px 8px;text-align:center;">
+            <h1 class="drm-heading" style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:21px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#0C0B08;">Conferma il tuo account</h1>
+            <p class="drm-text" style="margin:0 0 32px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#57534a;">
               Grazie per esserti registrato su DRAMMIS. Conferma il tuo indirizzo email per attivare l'account e iniziare a fare acquisti.
             </p>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#FFFFFF" align="center" style="background-color:#FFFFFF;padding:0 40px;">
+          <td bgcolor="#FFFFFF" class="drm-white-section" align="center" style="background-color:#FFFFFF;padding:0 40px;">
             <table role="presentation" cellpadding="0" cellspacing="0">
               <tr>
-                <td bgcolor="#0C0B08" style="border-radius:8px;background-color:#0C0B08;">
-                  <a href="{{ .ConfirmationURL }}" target="_blank" style="display:inline-block;padding:15px 36px;font-family:Helvetica,Arial,sans-serif;font-size:13px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#FAFAF5;text-decoration:none;border-radius:8px;">
+                <td bgcolor="#0C0B08" class="drm-btn-cell" style="border-radius:8px;background-color:#0C0B08;">
+                  <a href="{{ .ConfirmationURL }}" target="_blank" class="drm-btn-link" style="display:inline-block;padding:15px 36px;font-family:Helvetica,Arial,sans-serif;font-size:13px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#FAFAF5;text-decoration:none;border-radius:8px;">
                     Conferma email
                   </a>
                 </td>
@@ -46,17 +60,17 @@
           </td>
         </tr>
         <tr>
-          <td bgcolor="#FFFFFF" style="background-color:#FFFFFF;padding:32px 40px 0;text-align:center;">
-            <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:#9a9585;">
+          <td bgcolor="#FFFFFF" class="drm-white-section" style="background-color:#FFFFFF;padding:32px 40px 0;text-align:center;">
+            <p class="drm-muted" style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:#9a9585;">
               Se il bottone non funziona, copia e incolla questo link nel browser:<br>
-              <a href="{{ .ConfirmationURL }}" style="color:#9a9585;word-break:break-all;">{{ .ConfirmationURL }}</a>
+              <a href="{{ .ConfirmationURL }}" class="drm-muted" style="color:#9a9585;word-break:break-all;">{{ .ConfirmationURL }}</a>
             </p>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#FFFFFF" style="background-color:#FFFFFF;padding:36px 40px 32px;">
+          <td bgcolor="#FFFFFF" class="drm-white-section" style="background-color:#FFFFFF;padding:36px 40px 32px;">
             <hr style="border:none;border-top:1px solid rgba(12,11,8,.12);margin:0 0 20px;">
-            <p style="margin:0;text-align:center;font-family:Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:.5px;color:#9a9585;">
+            <p class="drm-muted" style="margin:0;text-align:center;font-family:Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:.5px;color:#9a9585;">
               DRAMMIS — info.drammis@gmail.com
             </p>
           </td>
