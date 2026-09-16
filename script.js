@@ -92,6 +92,9 @@
 
   let authSession = null;
   let authMode = 'login'; // 'login' | 'register' | 'forgot' | 'recovery'
+  let registerStep = 1; // 1 = solo email, 2 = nome/cognome/password
+  let pendingRegisterEmail = '';
+  const escAttr = (s) => String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
   const AUTH_ERRORS = {
     'Invalid login credentials': 'Email o password non corrette.',
     'User already registered': 'Esiste già un account con questa email — prova ad accedere.',
@@ -357,7 +360,7 @@
   function onEnter(view) {
     if (view === 'cart') renderCart();
     else if (view === 'checkout') renderCheckout();
-    else if (view === 'account') { if (authMode !== 'recovery') authMode = 'login'; renderAccount(); }
+    else if (view === 'account') { if (authMode !== 'recovery') { authMode = 'login'; registerStep = 1; pendingRegisterEmail = ''; } renderAccount(); }
     else if (view === 'favorites') renderFavorites();
   }
 
@@ -502,6 +505,28 @@
   }
 
   /* ---------- ACCOUNT RENDERER ---------- */
+  const EYE_OPEN = '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>';
+  const EYE_OFF = '<path d="M3 3l18 18"/><path d="M10.6 5.2C11 5.1 11.5 5 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.1M6.6 6.6A17.9 17.9 0 0 0 2 12s3.6 7 10 7c1.4 0 2.7-.3 3.9-.8"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>';
+  const APPLE_ICON_PATH = 'M16.365 1.43c0 1.14-.478 2.226-1.257 3.02-.83.85-2.15 1.5-3.23 1.41-.14-1.1.44-2.25 1.2-3.02.83-.86 2.28-1.49 3.29-1.41zm3.56 16.36c-.48 1.08-.71 1.56-1.33 2.51-.87 1.32-2.1 2.97-3.62 2.98-1.35.02-1.7-.88-3.53-.87-1.83.01-2.21.89-3.56.87-1.52-.02-2.69-1.5-3.56-2.81-2.44-3.68-2.7-8-.19-10.58 1.13-1.16 2.9-1.9 4.51-1.92 1.42-.02 2.07.9 3.55.9 1.47 0 2.26-.9 3.56-.9.6 0 2.4.05 3.62 1.66-3.19 1.75-2.67 6.12.55 8.16z';
+  const GOOGLE_ICON = `<path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.874 2.684-6.616z"/>
+    <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+    <path fill="#FBBC05" d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z"/>
+    <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.962L3.964 7.294C4.672 5.167 6.656 3.58 9 3.58z"/>`;
+
+  function accField(id, type, label, name, extra = '') {
+    return `<div class="acc-field">
+      <input type="${type}" id="${id}" name="${name}" placeholder=" " ${extra}>
+      <label for="${id}">${label}</label>
+    </div>`;
+  }
+  function accPassField(id, label, name, extra = '') {
+    return `<div class="acc-field acc-field--pass">
+      <input type="password" id="${id}" name="${name}" placeholder=" " ${extra}>
+      <label for="${id}">${label}</label>
+      <button type="button" class="acc-eye" data-eye="${id}" aria-label="Mostra password"><svg viewBox="0 0 24 24">${EYE_OPEN}</svg></button>
+    </div>`;
+  }
+
   function renderAccount() {
     const panel = document.getElementById('accountPanel');
     if (!panel) return;
@@ -509,14 +534,16 @@
 
     if (user) {
       panel.innerHTML = `
-        <div class="account__panel account__panel--alt account__panel--wide">
-          <h3>Bentornato, ${user.firstname}</h3>
-          <p>Hai effettuato l'accesso come <strong>${user.email}</strong>.</p>
-          <button class="pill pill--ghost" id="logoutBtn">Esci <em>→</em></button>
-        </div>
-        <div class="account__panel account__panel--wide">
-          <h3>I tuoi ordini</h3>
-          <div id="orderHistory"><p class="account__msg">Carico i tuoi ordini…</p></div>
+        <div class="acc-wrap">
+          <div class="acc-block">
+            <h2 class="acc-h">Bentornato, ${user.firstname}</h2>
+            <p class="acc-lead">Hai effettuato l'accesso come <strong>${user.email}</strong>.</p>
+            <button class="pill pill--ghost acc-cta" id="logoutBtn">Esci <em>→</em></button>
+          </div>
+          <div class="acc-block">
+            <h2 class="acc-h">I tuoi ordini</h2>
+            <div id="orderHistory"><p class="account__msg">Carico i tuoi ordini…</p></div>
+          </div>
         </div>`;
       loadOrderHistory(user.id);
       return;
@@ -524,60 +551,101 @@
 
     if (authMode === 'recovery') {
       panel.innerHTML = `
-        <div class="account__panel">
-          <h3>Imposta una nuova password</h3>
-          <p>Sei arrivata/o qui dal link che ti abbiamo mandato via email. Scegli una nuova password per il tuo account.</p>
-          <form class="account-form" id="recoveryForm" novalidate>
-            <label>Nuova password<input type="password" name="password" required minlength="6"></label>
-            <button class="pill pill--dark" type="submit">Salva password <em>→</em></button>
-          </form>
-          <p class="account__msg" id="recoveryMsg" hidden></p>
+        <div class="acc-wrap">
+          <div class="acc-block">
+            <h2 class="acc-h">Imposta una nuova password</h2>
+            <p class="acc-lead">Sei arrivata/o qui dal link che ti abbiamo mandato via email. Scegli una nuova password per il tuo account.</p>
+            <form class="acc-form" id="recoveryForm" novalidate>
+              ${accPassField('recoveryPassword', 'Nuova password', 'password', 'required minlength="6"')}
+              <button class="pill pill--dark acc-cta" type="submit">Salva password <em>→</em></button>
+            </form>
+            <p class="account__msg" id="recoveryMsg" hidden></p>
+          </div>
         </div>`;
       return;
     }
 
     if (authMode === 'forgot') {
       panel.innerHTML = `
-        <div class="account__panel">
-          <h3>Recupera la password</h3>
-          <p>Inserisci l'email del tuo account: ti mandiamo un link per reimpostare la password.</p>
-          <form class="account-form" id="forgotForm" novalidate>
-            <label>Email<input type="email" name="email" required></label>
-            <button class="pill pill--dark" type="submit">Invia link <em>→</em></button>
-            <a class="account__link" href="#" id="backToLogin">Torna al login</a>
-          </form>
-          <p class="account__msg" id="forgotMsg" hidden></p>
+        <div class="acc-wrap">
+          <div class="acc-block">
+            <h2 class="acc-h">Recupera la password</h2>
+            <p class="acc-lead">Inserisci l'email del tuo account: ti mandiamo un link per reimpostare la password.</p>
+            <form class="acc-form" id="forgotForm" novalidate>
+              ${accField('forgotEmail', 'email', 'Indirizzo email', 'email', 'required')}
+              <button class="pill pill--dark acc-cta" type="submit">Invia link <em>→</em></button>
+            </form>
+            <p class="account__msg" id="forgotMsg" hidden></p>
+            <a class="acc-link" href="#" id="backToLogin">Torna al login</a>
+          </div>
         </div>`;
       return;
     }
 
+    const registerBody = registerStep === 1
+      ? `<form class="acc-form" id="registerStep1Form" novalidate>
+          ${accField('regEmail', 'email', 'Indirizzo email', 'email', 'required value="' + escAttr(pendingRegisterEmail) + '"')}
+          <button class="pill pill--dark acc-cta" type="submit">Continua <em>→</em></button>
+        </form>`
+      : `<div class="acc-emailconfirm"><span>${pendingRegisterEmail}</span><a class="acc-link" href="#" id="editRegisterEmail">Modifica</a></div>
+        <form class="acc-form" id="registerForm" novalidate>
+          <input type="hidden" name="email" value="${escAttr(pendingRegisterEmail)}">
+          ${accField('regFirstname', 'text', 'Nome', 'firstname', 'required')}
+          ${accField('regLastname', 'text', 'Cognome', 'lastname', 'required')}
+          ${accPassField('regPassword', 'Password', 'password', 'required minlength="6"')}
+          <button class="pill pill--dark acc-cta" type="submit">Crea account <em>→</em></button>
+        </form>`;
+
     panel.innerHTML = `
-      <div class="account__panel">
-        <h3>Accedi</h3>
-        <form class="account-form" id="loginForm" novalidate>
-          <label>Email<input type="email" name="email" required></label>
-          <label>Password<input type="password" name="password" required></label>
-          <button class="pill pill--dark" type="submit">Accedi <em>→</em></button>
-          <a class="account__link" href="#" id="forgotLink">Password dimenticata?</a>
-        </form>
-        <p class="account__msg" id="loginMsg" hidden></p>
-      </div>
-      <div class="account__panel account__panel--alt">
-        <h3>Nuovo cliente</h3>
-        <p>Crea un account per un checkout più rapido, salvare i tuoi preferiti e seguire lo stato dei tuoi ordini.</p>
-        <ul class="account__perks">
-          <li>Ordini e resi in un tocco</li>
-          <li>Preferiti sempre sincronizzati</li>
-          <li>Accesso anticipato alle collezioni</li>
-        </ul>
-        <form class="account-form" id="registerForm" novalidate>
-          <label>Nome<input type="text" name="firstname" required></label>
-          <label>Cognome<input type="text" name="lastname" required></label>
-          <label>Email<input type="email" name="email" required></label>
-          <label>Password<input type="password" name="password" required minlength="6"></label>
-          <button class="pill pill--ghost" type="submit">Crea account <em>→</em></button>
-        </form>
-        <p class="account__msg" id="registerMsg" hidden></p>
+      <div class="acc-wrap">
+        <div class="acc-block">
+          <h2 class="acc-h">Accedi</h2>
+          <form class="acc-form" id="loginForm" novalidate>
+            ${accField('loginEmail', 'email', 'Indirizzo email', 'email', 'required')}
+            ${accPassField('loginPassword', 'Password', 'password', 'required')}
+            <div class="acc-row">
+              <label class="acc-check"><input type="checkbox" checked> Mantieni l'accesso</label>
+              <a class="acc-link" href="#" id="forgotLink">Hai dimenticato la password?</a>
+            </div>
+            <button class="pill pill--dark acc-cta" type="submit">Accedi <em>→</em></button>
+          </form>
+          <p class="account__msg" id="loginMsg" hidden></p>
+
+          <div class="acc-divider"><span>oppure</span></div>
+
+          <div class="acc-social">
+            <button type="button" class="acc-social-btn" data-social="apple">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="${APPLE_ICON_PATH}"/></svg>
+              Continua con Apple
+            </button>
+            <button type="button" class="acc-social-btn" data-social="google">
+              <svg viewBox="0 0 18 18">${GOOGLE_ICON}</svg>
+              Continua con Google
+            </button>
+          </div>
+          <p class="acc-soon" id="socialSoonMsg" hidden></p>
+        </div>
+
+        <div class="acc-block">
+          <h2 class="acc-h">Crea un profilo</h2>
+          ${registerBody}
+          <p class="account__msg" id="registerMsg" hidden></p>
+
+          <div class="acc-perks">
+            <div class="acc-perk">
+              <h4>Traccia il tuo ordine</h4>
+              <p>Segui il tuo ordine in ogni fase del processo.</p>
+            </div>
+            <div class="acc-perk">
+              <h4>Semplifica il pagamento</h4>
+              <p>Completa l'acquisto più velocemente salvando indirizzi e metodi di pagamento.</p>
+            </div>
+            <div class="acc-perk">
+              <h4>Accesso in anteprima</h4>
+              <p>Accedi in anticipo alle nuove collezioni e alle edizioni limitate DRAMMIS.</p>
+            </div>
+          </div>
+        </div>
       </div>`;
   }
 
@@ -766,13 +834,40 @@
 
     // account: esci
     const logout = e.target.closest('#logoutBtn');
-    if (logout) { supa.auth.signOut().then(() => { authMode = 'login'; renderAccount(); }); return; }
+    if (logout) { supa.auth.signOut().then(() => { authMode = 'login'; registerStep = 1; pendingRegisterEmail = ''; renderAccount(); }); return; }
 
     // account: passa alla schermata "password dimenticata" / torna al login
     const forgotLink = e.target.closest('#forgotLink');
     if (forgotLink) { e.preventDefault(); authMode = 'forgot'; renderAccount(); return; }
     const backToLogin = e.target.closest('#backToLogin');
     if (backToLogin) { e.preventDefault(); authMode = 'login'; renderAccount(); return; }
+
+    // account: mostra/nascondi password
+    const eyeBtn = e.target.closest('[data-eye]');
+    if (eyeBtn) {
+      const input = document.getElementById(eyeBtn.dataset.eye);
+      if (input) {
+        const show = input.type === 'password';
+        input.type = show ? 'text' : 'password';
+        eyeBtn.querySelector('svg').innerHTML = show ? EYE_OFF : EYE_OPEN;
+      }
+      return;
+    }
+
+    // account: torna a modificare l'email nello step 2 della registrazione
+    const editEmail = e.target.closest('#editRegisterEmail');
+    if (editEmail) { e.preventDefault(); registerStep = 1; renderAccount(); return; }
+
+    // account: bottoni social (non ancora attivi)
+    const socialBtn = e.target.closest('[data-social]');
+    if (socialBtn) {
+      const msg = document.getElementById('socialSoonMsg');
+      if (msg) {
+        msg.hidden = false;
+        msg.textContent = `L'accesso con ${socialBtn.dataset.social === 'apple' ? 'Apple' : 'Google'} sarà disponibile a breve.`;
+      }
+      return;
+    }
 
     // PDP box lungo Luxo — selezione variante (entrambe / bianco / nero)
     const variant = e.target.closest('.pdp__variant');
@@ -889,6 +984,16 @@
           if (error && msg) { msg.hidden = false; msg.textContent = authErrorText(error); }
           // sul successo ci pensa onAuthStateChange a ri-renderizzare il pannello
         });
+      return;
+    }
+    if (e.target.id === 'registerStep1Form') {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const email = fd.get('email').trim().toLowerCase();
+      if (!email) return;
+      pendingRegisterEmail = email;
+      registerStep = 2;
+      renderAccount();
       return;
     }
     if (e.target.id === 'registerForm') {

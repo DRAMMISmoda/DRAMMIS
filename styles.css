@@ -1073,30 +1073,53 @@ body.theme-home .header .logo{opacity:0;visibility:hidden;pointer-events:none}
 .pill--ghost{border:1px solid var(--line);color:var(--fg)}
 .pill--ghost:hover{border-color:var(--fg)}
 
-/* account */
-.account{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px);max-width:960px;margin:0 auto}
-.account__panel{border:1px solid var(--line);border-radius:18px;padding:clamp(28px,4vw,48px)}
-.account__panel--alt{background:var(--card);box-shadow:var(--card-shadow)}
-.account__panel h3{font-family:'Urbanist',sans-serif;font-size:1.8rem;font-weight:500;margin-bottom:1.6rem}
-.account-form{display:flex;flex-direction:column;gap:1.1rem}
-.account-form label{display:flex;flex-direction:column;gap:.5rem;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.account-form input{padding:.9rem 1rem;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--fg);font-family:inherit;font-size:.95rem;outline:none;transition:border-color .3s}
-.account-form input:focus{border-color:var(--fg)}
-.account-form .pill{margin-top:.4rem;justify-content:center}
-.account__link{font-size:.82rem;color:var(--muted);text-align:center;transition:color .3s}
-.account__link:hover{color:var(--fg)}
-.account__panel--alt p{color:var(--muted);margin-bottom:1.4rem;line-height:1.7}
-.account__perks{list-style:none;display:flex;flex-direction:column;gap:.7rem;margin-bottom:1.8rem}
-.account__perks li{padding-left:1.4rem;position:relative;color:var(--fg);font-size:.95rem}
-.account__perks li::before{content:"—";position:absolute;left:0;color:var(--muted)}
-.account__msg{margin-top:1.2rem;color:var(--fg);font-size:1rem;line-height:1.6}
-.account__panel--wide{grid-column:1/-1;max-width:520px;margin:0 auto;text-align:center}
-.account__panel--wide .pill{margin-top:.6rem}
-.account__panel--wide #orderHistory{text-align:left;margin-top:1.4rem;display:flex;flex-direction:column;gap:14px}
-.order-card{border:1px solid var(--line);border-radius:14px;padding:1.2rem 1.4rem}
+/* account — stile editoriale minimal (rif. Gucci), adattato ai colori/font DRAMMIS */
+.account{max-width:640px;margin:0 auto}
+.acc-wrap{display:flex;flex-direction:column;gap:clamp(56px,8vw,96px)}
+.acc-block{width:100%}
+.acc-h{font-family:'Urbanist',sans-serif;font-weight:700;font-size:clamp(1.4rem,2.6vw,1.85rem);letter-spacing:.03em;text-transform:uppercase;margin-bottom:2.2rem}
+.acc-lead{color:var(--muted);margin-bottom:1.8rem;line-height:1.7}
+
+.acc-form{display:flex;flex-direction:column}
+.acc-field{position:relative;margin-bottom:1.9rem}
+.acc-field input{width:100%;border:none;border-bottom:1px solid var(--line);background:transparent;padding:.55rem 0 .6rem;font-family:inherit;font-size:1rem;color:var(--fg);outline:none;transition:border-color .3s}
+.acc-field input:focus{border-color:var(--fg)}
+.acc-field label{position:absolute;left:0;top:.6rem;color:var(--muted);font-size:.95rem;pointer-events:none;transition:top .2s ease,font-size .2s ease,letter-spacing .2s ease}
+.acc-field input:focus + label,
+.acc-field input:not(:placeholder-shown) + label{top:-1rem;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase}
+.acc-field--pass input{padding-right:2.3rem}
+.acc-eye{position:absolute;right:0;top:.28rem;width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.acc-eye:hover{color:var(--fg)}
+.acc-eye svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+.acc-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;margin-bottom:2.2rem}
+.acc-check{display:flex;align-items:center;gap:.6rem;font-size:.82rem;color:var(--fg);cursor:pointer}
+.acc-check input{accent-color:var(--fg);width:16px;height:16px}
+.acc-link{font-size:.82rem;color:var(--fg);text-decoration:underline;text-underline-offset:3px;transition:opacity .3s}
+.acc-link:hover{opacity:.6}
+.acc-cta{width:100%;justify-content:center}
+
+.acc-divider{display:flex;align-items:center;gap:1rem;margin:2.6rem 0;color:var(--muted);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase}
+.acc-divider::before,.acc-divider::after{content:"";flex:1;height:1px;background:var(--line)}
+.acc-social{display:flex;flex-direction:column;gap:.9rem}
+.acc-social-btn{display:flex;align-items:center;justify-content:center;gap:.8rem;width:100%;padding:1rem;border:1px solid var(--fg);border-radius:var(--radius);background:transparent;color:var(--fg);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;transition:opacity .3s}
+.acc-social-btn:hover{opacity:.6}
+.acc-social-btn svg{width:18px;height:18px;flex-shrink:0}
+.acc-soon{margin-top:1rem;font-size:.82rem;color:var(--muted);text-align:center}
+
+.acc-emailconfirm{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.9rem 0;border-bottom:1px solid var(--line);margin-bottom:1.8rem;font-size:.95rem}
+.acc-emailconfirm span{color:var(--fg)}
+
+.acc-perks{display:flex;flex-direction:column;gap:1.6rem;margin-top:2.8rem;padding-top:2.8rem;border-top:1px solid var(--line)}
+.acc-perk h4{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin-bottom:.5rem}
+.acc-perk p{color:var(--muted);font-size:.9rem;line-height:1.6}
+
+.account__msg{margin-top:1.2rem;color:var(--fg);font-size:.92rem;line-height:1.6}
+
+.order-card{border:1px solid var(--line);border-radius:var(--radius);padding:1.2rem 1.4rem}
 .order-card__head{display:flex;justify-content:space-between;font-family:'Urbanist',sans-serif;font-weight:500;font-size:.95rem;margin-bottom:.6rem}
 .order-card__items{display:flex;flex-direction:column;gap:.3rem;color:var(--muted);font-size:.82rem}
-@media(max-width:760px){.account{grid-template-columns:1fr}}
+#orderHistory{margin-top:.4rem;display:flex;flex-direction:column;gap:14px}
 
 /* support */
 .support__card p a{color:var(--fg);text-decoration:underline}
@@ -1176,7 +1199,7 @@ body.theme-home .header .logo{opacity:0;visibility:hidden;pointer-events:none}
 
 /* 2 — profondità quasi impercettibile (ombre spente) */
 .card:hover .card__media{box-shadow:none}
-.cart-summary,.checkout-summary,.account__panel--alt,.card__media{box-shadow:none}
+.cart-summary,.checkout-summary,.card__media{box-shadow:none}
 
 /* 3 — ritmo verticale più raccolto (meno aria vuota) */
 .section{padding:clamp(54px,7.5vw,116px) var(--gutter)}
