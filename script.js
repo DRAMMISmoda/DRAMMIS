@@ -540,7 +540,7 @@
       justConfirmedSignup = false; // mostrato una sola volta
       panel.innerHTML = `
         <div class="acc-wrap">
-          <div class="acc-block">
+          <div class="acc-block acc-block--center">
             <h2 class="acc-h">${heading}, ${user.firstname}</h2>
             <p class="acc-lead">Hai effettuato l'accesso come <strong>${user.email}</strong>.</p>
             <button class="pill pill--ghost acc-cta" id="logoutBtn">Esci <em>→</em></button>
