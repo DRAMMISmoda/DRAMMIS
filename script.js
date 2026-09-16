@@ -104,7 +104,8 @@
   function currentUser() {
     if (!authSession) return null;
     const u = authSession.user;
-    return { id: u.id, email: u.email, firstname: (u.user_metadata && u.user_metadata.firstname) || u.email.split('@')[0] };
+    const meta = u.user_metadata || {};
+    return { id: u.id, email: u.email, firstname: meta.firstname || meta.given_name || meta.full_name || u.email.split('@')[0] };
   }
   supa.auth.onAuthStateChange((event, sess) => {
     authSession = sess;
@@ -858,13 +859,20 @@
     const editEmail = e.target.closest('#editRegisterEmail');
     if (editEmail) { e.preventDefault(); registerStep = 1; renderAccount(); return; }
 
-    // account: bottoni social (non ancora attivi)
+    // account: bottoni social — Google è attivo, Apple non ancora
     const socialBtn = e.target.closest('[data-social]');
     if (socialBtn) {
+      if (socialBtn.dataset.social === 'google') {
+        supa.auth.signInWithOAuth({
+          provider: 'google',
+          options: { redirectTo: window.location.origin + window.location.pathname },
+        });
+        return;
+      }
       const msg = document.getElementById('socialSoonMsg');
       if (msg) {
         msg.hidden = false;
-        msg.textContent = `L'accesso con ${socialBtn.dataset.social === 'apple' ? 'Apple' : 'Google'} sarà disponibile a breve.`;
+        msg.textContent = "L'accesso con Apple sarà disponibile a breve.";
       }
       return;
     }
