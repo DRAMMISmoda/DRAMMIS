@@ -1,16 +1,19 @@
 <!--
   DRAMMIS — template email "Confirm signup"
-  Non viene deployato automaticamente: va incollato a mano in
-  Supabase Dashboard → Authentication → Email Templates → Confirm signup → Message body (HTML)
+  Va incollato in: Supabase Dashboard → Authentication → Emails → Confirm signup → Message body (HTML)
   Variabile usata da Supabase: {{ .ConfirmationURL }}
 -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FAFAF5;padding:40px 16px;">
   <tr>
     <td align="center">
-      <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="max-width:480px;width:100%;background:#FFFFFF;border:1px solid rgba(12,11,8,.12);border-radius:12px;">
+      <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="max-width:480px;width:100%;background:#FFFFFF;border-radius:12px;overflow:hidden;">
+        <tr>
+          <td style="background:#0C0B08;padding:48px 40px;text-align:center;">
+            <img src="https://drammis.vercel.app/assets/logo-white.png" width="200" alt="DRAMMIS" style="display:block;margin:0 auto;height:auto;max-width:200px;">
+          </td>
+        </tr>
         <tr>
           <td style="padding:44px 40px 8px;text-align:center;">
-            <img src="https://drammis.vercel.app/assets/logo.png" width="140" alt="DRAMMIS" style="display:block;margin:0 auto 32px;height:auto;max-width:140px;">
             <h1 style="margin:0 0 16px;font-family:Helvetica,Arial,sans-serif;font-size:21px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#0C0B08;">Conferma il tuo account</h1>
             <p style="margin:0 0 32px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#57534a;">
               Grazie per esserti registrato su DRAMMIS. Conferma il tuo indirizzo email per attivare l'account e iniziare a fare acquisti.
