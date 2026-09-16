@@ -1080,6 +1080,7 @@ body.theme-home .header .logo{opacity:0;visibility:hidden;pointer-events:none}
 .acc-h{font-family:'Urbanist',sans-serif;font-weight:700;font-size:clamp(1.4rem,2.6vw,1.85rem);letter-spacing:.03em;text-transform:uppercase;margin-bottom:2.2rem}
 .acc-lead{color:var(--muted);margin-bottom:1.8rem;line-height:1.7}
 .acc-block--center{text-align:center}
+#orderHistory{text-align:center}
 
 .acc-form{display:flex;flex-direction:column}
 .acc-field{position:relative;margin-bottom:1.9rem}
