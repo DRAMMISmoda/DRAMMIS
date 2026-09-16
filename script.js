@@ -546,7 +546,7 @@
             <button class="pill pill--ghost acc-cta" id="logoutBtn">Esci <em>→</em></button>
           </div>
           <div class="acc-block">
-            <h2 class="acc-h">I tuoi ordini</h2>
+            <h2 class="acc-h" style="text-align:center">I tuoi ordini</h2>
             <div id="orderHistory"><p class="account__msg">Carico i tuoi ordini…</p></div>
           </div>
         </div>`;
